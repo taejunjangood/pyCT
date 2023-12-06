@@ -1,0 +1,1 @@
+void parallel_cuda(float *detector_array, float *transformation, float *object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na);
