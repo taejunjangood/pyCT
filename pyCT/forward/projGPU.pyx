@@ -11,7 +11,8 @@ cnp.import_array()
 ctypedef cnp.float32_t DTYPE
 
 cdef extern from "forward.h":
-    void parallel_cuda(float *detector_array, float *transformation, float *object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na)
+    void func_parallel(float *detector_array, float *transformation, float *object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na)
+    void func_cone    (float *detector_array, float *transformation, float *object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na, float su, float sv, float s2d, float near, float far);
 
 
 def projectParallelGPU(cnp.ndarray[DTYPE, ndim=1] detector_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na):
@@ -20,7 +21,24 @@ def projectParallelGPU(cnp.ndarray[DTYPE, ndim=1] detector_array, cnp.ndarray[DT
     cdef float *c_transformation = <float *> transformation.data
     cdef float *c_object_array = <float *> object_array.data
 
-    parallel_cuda(c_detector_array, c_transformation, c_object_array, nx, ny, nz, nu, nv, nw, na)
+    func_parallel(c_detector_array, c_transformation, c_object_array, nx, ny, nz, nu, nv, nw, na)
+
+    cdef cnp.npy_intp shape[1]
+    shape[0] = <cnp.npy_intp> (na*nv*nu)
+
+    new = cnp.PyArray_SimpleNewFromData(1, shape, cnp.NPY_FLOAT32, c_detector_array)
+    #PyArray_ENABLEFLAGS(new, cnp.NPY_OWNDATA)
+
+    return new
+
+
+def projectConeGPU(cnp.ndarray[DTYPE, ndim=1] detector_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na, float su, float sv, float s2d, float near, float far):
+
+    cdef float *c_detector_array = <float *> detector_array.data
+    cdef float *c_transformation = <float *> transformation.data
+    cdef float *c_object_array = <float *> object_array.data
+
+    func_cone(c_detector_array, c_transformation, c_object_array, nx, ny, nz, nu, nv, nw, na, su, sv, s2d, near, far)
 
     cdef cnp.npy_intp shape[1]
     shape[0] = <cnp.npy_intp> (na*nv*nu)
