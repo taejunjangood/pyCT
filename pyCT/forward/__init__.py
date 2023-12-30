@@ -1,7 +1,7 @@
 import pyCT
 from .transformation import *
-from .projCPU import *
-from projGPU import projectParallelGPU
+from .projectCPU import *
+from projectGPU import projectParallelBeamGPU, projectConeBeamGPU
 from copy import deepcopy
 
 def project(object_array, parameters, angles, **kwargs):
@@ -50,16 +50,16 @@ def project(object_array, parameters, angles, **kwargs):
         transformationMatrix = transformationMatrix.flatten().astype(np.float32)
         object_array = object_array.flatten().astype(np.float32)
         if mode:
-            pass
+            detector_array = deepcopy(projectConeBeamGPU(detector_array, transformationMatrix, object_array,  nx, ny, nz, nu, nv, nw, na, su, sv, s2d, near, far))
         else:
-            detector_array = deepcopy(projectParallelGPU(detector_array, transformationMatrix, object_array,  nx, ny, nz, nu, nv, nw, na))
+            detector_array = deepcopy(projectParallelBeamGPU(detector_array, transformationMatrix, object_array,  nx, ny, nz, nu, nv, nw, na))
         detector_array = detector_array.reshape(na,nv,nu)
     
     else:
         detector_array = np.zeros([na, nv, nu])
         if mode:
-            projectConeCPU(detector_array, transformationMatrix, object_array, nx, ny, nz, nu, nv, nw, na, near, far, s2d, su, sv)
+            projectConeBeamCPU(detector_array, transformationMatrix, object_array, nx, ny, nz, nu, nv, nw, na, near, far, s2d, su, sv)
         else:
-            projectParallelCPU(detector_array, transformationMatrix, object_array, nx, ny, nz, nu, nv, nw, na)
+            projectParallelBeamCPU(detector_array, transformationMatrix, object_array, nx, ny, nz, nu, nv, nw, na)
 
     return detector_array

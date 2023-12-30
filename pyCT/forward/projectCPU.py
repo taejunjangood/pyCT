@@ -1,6 +1,6 @@
 import numpy as np
 
-def projectConeCPU(detector_array, transformation, object_array, nx, ny, nz, nu, nv, nw, na, near, far, s2d, su, sv):
+def projectConeBeamCPU(detector_array, transformation, object_array, nx, ny, nz, nu, nv, nw, na, near, far, s2d, su, sv):
     pad = 1
     object_array = np.pad(object_array, pad)
     nx += (2*pad -1)
@@ -24,7 +24,7 @@ def projectConeCPU(detector_array, transformation, object_array, nx, ny, nz, nu,
                         detector_array[ia][iv][iu] += interp
 
 
-def projectParallelCPU(detector_array, transformation, object_array, nx, ny, nz, nu, nv, nw, na):
+def projectParallelBeamCPU(detector_array, transformation, object_array, nx, ny, nz, nu, nv, nw, na):
     pad = 1
     object_array = np.pad(object_array, pad)
     nx += (2*pad -1)
