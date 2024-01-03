@@ -142,9 +142,9 @@ void kernel_cone(float* proj, cudaTextureObject_t texObjImg, float* transformati
 
 	for (int i = 0; i < nw; i++)
 	{
-		float x = t00*rx*t + t01*ry*t t02*rz*t + t03;
-		float x = t10*rx*t + t11*ry*t t12*rz*t + t13;
-		float x = t20*rx*t + t21*ry*t t22*rz*t + t23;
+		float x = t00*rx*t + t01*ry*t + t02*rz*t + t03;
+		float y = t10*rx*t + t11*ry*t + t12*rz*t + t13;
+		float z = t20*rx*t + t21*ry*t + t22*rz*t + t23;
 		sum += tex3D<float>(texObjImg, x+.5, y+.5, z+.5);
 		t += dt;
 	}
