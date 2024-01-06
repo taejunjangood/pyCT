@@ -1,6 +1,6 @@
 import yaml
 
-def getParameters(path_header):
+def getParameters(path_header=None):
     return _Parameters(path_header)
 
 class _Parameters():
@@ -19,7 +19,8 @@ class _Parameters():
                                offset  = Struct(u=None, v=None))
         self.distance = Struct(source2object=None, source2detector=None, near=None, far=None)
         
-        self.__setParameters(path_header)
+        if path_header is not None:
+            self.__setParameters(path_header)
         
     def __str__(self):
         output = ''
