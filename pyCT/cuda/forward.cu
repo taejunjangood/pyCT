@@ -52,7 +52,7 @@ void kernel_parallel(float* proj, cudaTextureObject_t texObjImg, float* transfor
 void funcParallelBeam(float *detector_array, float *transformation, float *object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na)
 {
 	// object array >> texture memory
-	const cudaExtent objSize = make_cudaExtent(nz, ny, nx);
+	const cudaExtent objSize = make_cudaExtent(nx, ny, nz);
 	cudaArray *d_object_array = 0;
 	cudaTextureObject_t tex_object_array = 0;
 
@@ -155,7 +155,7 @@ void kernel_cone(float* proj, cudaTextureObject_t texObjImg, float* transformati
 void funcConeBeam(float *detector_array, float *transformation, float *object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na, float su, float sv, float s2d, float near, float far)
 {
 	// object array >> texture memory
-	const cudaExtent objSize = make_cudaExtent(nz, ny, nx);
+	const cudaExtent objSize = make_cudaExtent(nx, ny, nz);
 	cudaArray *d_object_array = 0;
 	cudaTextureObject_t tex_object_array = 0;
 
