@@ -58,7 +58,7 @@ def project(object_array, parameters, angles, **kwargs):
     else:
         detector_array = np.zeros([na, nv, nu])
         if mode:
-            projectConeBeamCPU(detector_array, transformationMatrix, object_array, nx, ny, nz, nu, nv, nw, na, near, far, s2d, su, sv)
+            projectConeBeamCPU(detector_array, transformationMatrix, object_array, nx, ny, nz, nu, nv, nw, na, su, sv, s2d, near, far)
         else:
             projectParallelBeamCPU(detector_array, transformationMatrix, object_array, nx, ny, nz, nu, nv, nw, na)
 

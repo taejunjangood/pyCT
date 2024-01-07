@@ -1,6 +1,6 @@
 import numpy as np
 
-def projectConeBeamCPU(detector_array, transformation, object_array, nx, ny, nz, nu, nv, nw, na, near, far, s2d, su, sv):
+def projectConeBeamCPU(detector_array, transformation, object_array, nx, ny, nz, nu, nv, nw, na, su, sv, s2d, near, far):
     pad = 1
     object_array = np.pad(object_array, pad)
     nx += (2*pad -1)
