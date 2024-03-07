@@ -1,10 +1,15 @@
 import pyCT
+from pyCT.parameter import _Parameters
 from .transformation import *
 from .projectCPU import *
 from projectGPU import projectParallelBeamGPU, projectConeBeamGPU
 from copy import deepcopy
 
-def project(object_array, parameters, angles, **kwargs):
+def project(object_array : np.ndarray, 
+            parameters : _Parameters, 
+            angles,
+            *args,
+            **kwargs):
     # check CUDA
     is_cuda = False if pyCT.CUDA is None else True        
     if 'cuda' in kwargs.keys():
@@ -20,6 +25,12 @@ def project(object_array, parameters, angles, **kwargs):
         step = kwargs['step']
     else:
         step = .5
+
+    # set offsets
+    if 'offsets' in kwargs.keys():
+        offsets = kwargs['offsets']
+    else:
+        offsets = [0,0,0]
 
     # get parameters
     mode = parameters.mode
@@ -42,7 +53,7 @@ def project(object_array, parameters, angles, **kwargs):
     
     # get transformation
     transformation = getTransformation(parameters)
-    transformationMatrix = transformation.getMatrix(angles)
+    transformationMatrix = transformation.getMatrix(angles, offsets, *args)
 
     # run
     if is_cuda:

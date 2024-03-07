@@ -5,7 +5,7 @@ def projectConeBeamCPU(detector_array, transformation, object_array, nx, ny, nz,
     object_array = np.pad(object_array, pad)
     nx += (2*pad -1)
     nz += (2*pad -1)    
-    X,Y = np.meshgrid(np.linspace(-su/2+(su/nu)/2, su/2-(su/nu)/2, nu), np.linspace(-sv/2+(sv/nv)/2, sv/2-(sv/nv)/2, nv))
+    X, Y = np.meshgrid(np.linspace(-su/2+(su/nu)/2, su/2-(su/nu)/2, nu), np.linspace(-sv/2+(sv/nv)/2, sv/2-(sv/nv)/2, nv))
     Z = -s2d * np.ones_like(X)
     directions = np.stack([X,Y,Z], axis=-1)
     directions /= np.linalg.norm(directions, axis=-1, keepdims=True)
