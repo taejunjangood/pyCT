@@ -5,10 +5,8 @@ from .projectCPU import *
 from projectGPU import projectParallelBeamGPU, projectConeBeamGPU
 from copy import deepcopy
 
-def project(object_array : np.ndarray, 
-            parameters : _Parameters, 
-            angles,
-            *args,
+def project(object_array : np.ndarray,
+            parameters : _Parameters,
             **kwargs):
     # check CUDA
     is_cuda = False if pyCT.CUDA is None else True        
@@ -26,12 +24,6 @@ def project(object_array : np.ndarray,
     else:
         step = .5
 
-    # set offsets
-    if 'offsets' in kwargs.keys():
-        offsets = kwargs['offsets']
-    else:
-        offsets = [0,0,0]
-
     # get parameters
     mode = parameters.mode
 
@@ -39,21 +31,18 @@ def project(object_array : np.ndarray,
     far = parameters.distance.far
     s2d = parameters.distance.source2detector
     
-    nx = parameters.object.size.x
-    ny = parameters.object.size.y
-    nz = parameters.object.size.z
-    nu = parameters.detector.size.u
-    nv = parameters.detector.size.v
+    nx, ny, nz = parameters.object.size.get()
+    nu, nv = parameters.detector.size.get()
     nw = int((far - near) / step)
 
     su = parameters.detector.length.u
     sv = parameters.detector.length.v
 
-    na = 1 if type(angles) in [int, float] else len(angles)
+    na = len(parameters.detector.motion.rotation)
     
     # get transformation
     transformation = getTransformation(parameters)
-    transformationMatrix = transformation.getMatrix(angles, offsets, *args)
+    transformationMatrix = transformation.get()
 
     # run
     if is_cuda:
@@ -72,5 +61,5 @@ def project(object_array : np.ndarray,
             projectConeBeamCPU(detector_array, transformationMatrix, object_array, nx, ny, nz, nu, nv, nw, na, su, sv, s2d, near, far)
         else:
             projectParallelBeamCPU(detector_array, transformationMatrix, object_array, nx, ny, nz, nu, nv, nw, na)
-
-    return detector_array
+    
+    return detector_array * step

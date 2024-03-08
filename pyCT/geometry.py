@@ -6,25 +6,23 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 
 def show(params : _Parameters, 
-         angle = 0, 
-         offset = [0,0,0],
          obj = None, 
          scale = 4,
          view = None,
          *args):
     
     ax = plt.figure(figsize=(10,10)).add_subplot(projection='3d')
+    proj = pyCT.forward.project(obj, params)[0]
     
     params2 = params.copy()
     params2.object.size.set(np.array(params.object.size.get())//scale)
     params2.object.spacing.set(np.array(params.object.spacing.get())*scale)
     params2.set()
     tf = pyCT.forward.getTransformation(params2)
-    _ = tf.getMatrix(angle, offset, *args)
+    cube = rescale(obj, 1/scale, preserve_range=True, anti_aliasing=False)
 
     if obj is not None:
         # volume
-        cube = rescale(obj, 1/scale, preserve_range=True, anti_aliasing=False)
         z, y, x = np.indices(np.array(cube.shape)+1)
         x, y, z, _ = tf.worldTransformation[0] @ np.stack([x.flatten(), y.flatten(), z.flatten(),np.ones_like(z.flatten())])
         x = x.reshape(params2.object.size.z+1, params2.object.size.y+1, params2.object.size.x+1) - params2.object.spacing.x/2
@@ -36,7 +34,6 @@ def show(params : _Parameters,
         ax.voxels(x, y, z, filled=filled, facecolors=facecolors, shade=True)
 
         # projection
-        proj = pyCT.forward.project(obj, params, angles=angle, offsets=offset)[0]
         su, sv = params.detector.length.get()
         nu, nv = params.detector.size.get()
         X,Y = np.meshgrid(np.linspace(.5,su-.5,nu)-su/2, np.linspace(.5,sv-.5,nv)-sv/2)

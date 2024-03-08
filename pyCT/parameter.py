@@ -1,4 +1,5 @@
 import yaml
+import numpy as np
 from copy import deepcopy
 
 def getParameters(path_header=None):
@@ -112,22 +113,6 @@ class _Parameters():
             elif key == 'object_spacing_z':
                 self.object.spacing.z = value
             
-            # set object offsets
-            elif key == 'object_offset_x':
-                self.object.offset.x = value
-            elif key == 'object_offset_y':
-                self.object.offset.y = value
-            elif key == 'object_offset_z':
-                self.object.offset.z = value
-            
-            # set object rotations
-            elif key == 'object_rotation_alpha':
-                self.object.rotation.alpha = value
-            elif key == 'object_rotation_beta':                
-                self.object.rotation.beta = value
-            elif key == 'object_rotation_gamma':                
-                self.object.rotation.gamma = value    
-
             # set detector size
             elif key == 'detector_size_u':
                 self.detector.size.u = value
@@ -139,12 +124,6 @@ class _Parameters():
                 self.detector.spacing.u = value
             elif key == 'detector_spacing_v':
                 self.detector.spacing.v = value
-        
-            # set object offset
-            elif key == 'detector_offset_u':
-                self.detector.offset.u = value
-            elif key == 'detector_offset_v':
-                self.detector.offset.v = value
 
             # set distance
             elif key == 'distance_source2object':
@@ -160,7 +139,7 @@ class _2D():
         self.u = ls[0]
         self.v = ls[1]
     def get(self):
-        return [self.u, self.v]
+        return np.array([self.u, self.v])
     def check(self):
         if (self.u == None) or (self.v == None):
             return False
@@ -177,7 +156,7 @@ class _3D():
         self.y = ls[1]
         self.z = ls[2]
     def get(self):
-        return [self.x, self.y, self.z]
+        return np.array([self.x, self.y, self.z])
     def check(self):
         if (self.x == None) or (self.y == None) or (self.z == None):
             return False
@@ -187,22 +166,16 @@ class _3D():
 class _Motion():
     def __init__(self):
         self.rotation = [[0,0,0],]
-        self.traslation = [[0,0,0],]
-    def set(self, alpha, beta, gamma):
-        self.rotation = [alpha, beta, gamma]
-
-class _EulerAngle():
-    # order = 'zxz'
-    def __init__(self, alpha=0, beta=0 ,gamma=0):
-        self.alpha = alpha
-        self.beta = beta
-        self.gamma = gamma
-    def set(self, ls):
-        self.alpha = ls[0]
-        self.beta = ls[1]
-        self.gamma = ls[2]
-    def get(self):
-        return [self.alpha, self.beta, self.gamma]
+        self.translation = [[0,0,0],]
+    def set(self, alpha, beta=None, gamma=None, offset=None):
+        na = len(alpha)
+        if beta is None:
+            beta = np.zeros(na)
+        if gamma is None:
+            gamma = np.zeros(na)
+        self.rotation = np.array([alpha, beta, gamma]).T
+        if offset is not None:
+            self.translation = offset
 
 class _Object():
     def __init__(self):
@@ -210,8 +183,6 @@ class _Object():
         self.length = _3D()
         self.spacing = _3D()
         self.motion = _Motion()
-        self.offset = _3D(0, 0, 0)
-        self.rotation = _EulerAngle()
 
 class _Detector():
     def __init__(self):
@@ -219,9 +190,7 @@ class _Detector():
         self.length = _2D()
         self.spacing = _2D()
         self.motion = _Motion()
-        self.offset = _2D(0, 0)
-        self.rotation = _EulerAngle()
-
+        
 class _Distance():
     def __init__(self):
         self.source2object = None
