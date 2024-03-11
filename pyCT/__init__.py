@@ -14,9 +14,11 @@ if hasattr(os, "add_dll_directory"):
 
 
 import pyCT.forward as forward
-# import pyCT.backward as backward
+import pyCT.backward as backward
+import pyCT.geometry as geometry
 from pyCT.parameter import getParameters
 from pyCT.phantom import getPhantom
+from pyCT.transformation import getTransformation
 
 
 IS_WINDOWS = sys.platform == "win32"

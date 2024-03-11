@@ -332,7 +332,7 @@ ext1 = Extension('projectGPU',
 setup(
     name="pyCT", 
     py_modules=['pyCT.py'],
-    version="0.0.2",
+    version="0.1.0",
     ext_modules=[ext1],
     cmdclass={"build_ext" : BuildExtension},
     packages=find_packages(),

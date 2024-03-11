@@ -18,7 +18,10 @@ def show(params : _Parameters,
     params2.object.size.set(np.array(params.object.size.get())//scale)
     params2.object.spacing.set(np.array(params.object.spacing.get())*scale)
     params2.set()
-    tf = pyCT.forward.getTransformation(params2)
+    near = params2.distance.near
+    far = params2.distance.far
+    nw = int((far - near) / .5)
+    tf = pyCT.getTransformation(params2, nw)
     cube = rescale(obj, 1/scale, preserve_range=True, anti_aliasing=False)
 
     if obj is not None:

@@ -1,6 +1,5 @@
 import pyCT
 from pyCT.parameter import _Parameters
-from .transformation import *
 from .projectCPU import *
 from projectGPU import projectParallelBeamGPU, projectConeBeamGPU
 from copy import deepcopy
@@ -18,11 +17,11 @@ def project(object_array : np.ndarray,
             if kwargs['cuda']:
                 print('CUDA is not available ...')
     
-    # set step size
-    if 'step' in kwargs.keys():
-        step = kwargs['step']
+    # set ray_step size
+    if 'ray_step' in kwargs.keys():
+        ray_step = kwargs['ray_step']
     else:
-        step = .5
+        ray_step = .5
 
     # get parameters
     mode = parameters.mode
@@ -33,7 +32,7 @@ def project(object_array : np.ndarray,
     
     nx, ny, nz = parameters.object.size.get()
     nu, nv = parameters.detector.size.get()
-    nw = int((far - near) / step)
+    nw = int((far - near) / ray_step)
 
     su = parameters.detector.length.u
     sv = parameters.detector.length.v
@@ -41,8 +40,8 @@ def project(object_array : np.ndarray,
     na = len(parameters.detector.motion.rotation)
     
     # get transformation
-    transformation = getTransformation(parameters)
-    transformationMatrix = transformation.get()
+    transformation = pyCT.getTransformation(parameters, nw)
+    transformationMatrix = transformation.getForward()
 
     # run
     if is_cuda:
@@ -62,4 +61,4 @@ def project(object_array : np.ndarray,
         else:
             projectParallelBeamCPU(detector_array, transformationMatrix, object_array, nx, ny, nz, nu, nv, nw, na)
     
-    return detector_array * step
+    return detector_array * ray_step
