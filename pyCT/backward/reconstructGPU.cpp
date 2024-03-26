@@ -9,7 +9,7 @@
             "/tmp/pip-build-env-09ovhoqd/overlay/lib/python3.10/site-packages/numpy/core/include/numpy/ndarrayobject.h",
             "/tmp/pip-build-env-09ovhoqd/overlay/lib/python3.10/site-packages/numpy/core/include/numpy/ndarraytypes.h",
             "/tmp/pip-build-env-09ovhoqd/overlay/lib/python3.10/site-packages/numpy/core/include/numpy/ufuncobject.h",
-            "pyCT/cuda/forward.h"
+            "pyCT/cuda/backward.h"
         ],
         "include_dirs": [
             "/tmp/pip-build-env-09ovhoqd/overlay/lib/python3.10/site-packages/numpy/core/include",
@@ -23,16 +23,16 @@
         "library_dirs": [
             "/usr/local/cuda-11.8/lib64"
         ],
-        "name": "projectGPU",
+        "name": "reconstructGPU",
         "runtime_library_dirs": [
             "/usr/local/cuda-11.8/lib64"
         ],
         "sources": [
-            "pyCT/forward/projectGPU.pyx",
-            "pyCT/cuda/forward.cu"
+            "pyCT/backward/reconstructGPU.pyx",
+            "pyCT/cuda/backward.cu"
         ]
     },
-    "module_name": "projectGPU"
+    "module_name": "reconstructGPU"
 }
 END: Cython Metadata */
 
@@ -1234,8 +1234,8 @@ static CYTHON_INLINE float __PYX_NAN() {
     #define __PYX_EXTERN_C extern "C++"
 #endif
 
-#define __PYX_HAVE__projectGPU
-#define __PYX_HAVE_API__projectGPU
+#define __PYX_HAVE__reconstructGPU
+#define __PYX_HAVE_API__reconstructGPU
 /* Early includes */
 #include <string.h>
 #include <stdio.h>
@@ -1247,7 +1247,7 @@ static CYTHON_INLINE float __PYX_NAN() {
 #include "numpy/ndarraytypes.h"
 #include "numpy/arrayscalars.h"
 #include "numpy/ufuncobject.h"
-#include "forward.h"
+#include "backward.h"
 #ifdef _OPENMP
 #include <omp.h>
 #endif /* _OPENMP */
@@ -1519,7 +1519,7 @@ static const char *__pyx_filename;
 
 static const char *__pyx_f[] = {
   "__init__.cython-30.pxd",
-  "pyCT/forward/projectGPU.pyx",
+  "pyCT/backward/reconstructGPU.pyx",
   "type.pxd",
 };
 /* #### Code section: utility_code_proto_before_types ### */
@@ -1736,14 +1736,14 @@ typedef npy_double __pyx_t_5numpy_double_t;
  */
 typedef npy_longdouble __pyx_t_5numpy_longdouble_t;
 
-/* "projectGPU.pyx":5
+/* "reconstructGPU.pyx":5
  * cnp.import_array()
  * 
  * ctypedef cnp.float32_t DTYPE             # <<<<<<<<<<<<<<
  * 
- * cdef extern from "forward.h":
+ * cdef extern from "backward.h":
  */
-typedef __pyx_t_5numpy_float32_t __pyx_t_10projectGPU_DTYPE;
+typedef __pyx_t_5numpy_float32_t __pyx_t_14reconstructGPU_DTYPE;
 /* #### Code section: complex_type_declarations ### */
 /* Declarations.proto */
 #if CYTHON_CCOMPLEX && (1) && (!0 || __cplusplus)
@@ -2522,61 +2522,60 @@ static CYTHON_INLINE char *__pyx_f_5numpy_7ndarray_4data_data(PyArrayObject *__p
 /* Module declarations from "numpy" */
 static CYTHON_INLINE int __pyx_f_5numpy_import_array(void); /*proto*/
 
-/* Module declarations from "projectGPU" */
+/* Module declarations from "reconstructGPU" */
 /* #### Code section: typeinfo ### */
-static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_10projectGPU_DTYPE = { "DTYPE", NULL, sizeof(__pyx_t_10projectGPU_DTYPE), { 0 }, 0, 'R', 0, 0 };
+static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_14reconstructGPU_DTYPE = { "DTYPE", NULL, sizeof(__pyx_t_14reconstructGPU_DTYPE), { 0 }, 0, 'R', 0, 0 };
 /* #### Code section: before_global_var ### */
-#define __Pyx_MODULE_NAME "projectGPU"
-extern int __pyx_module_is_main_projectGPU;
-int __pyx_module_is_main_projectGPU = 0;
+#define __Pyx_MODULE_NAME "reconstructGPU"
+extern int __pyx_module_is_main_reconstructGPU;
+int __pyx_module_is_main_reconstructGPU = 0;
 
-/* Implementation of "projectGPU" */
+/* Implementation of "reconstructGPU" */
 /* #### Code section: global_var ### */
 static PyObject *__pyx_builtin_ImportError;
 /* #### Code section: string_decls ### */
 static const char __pyx_k__3[] = "*";
 static const char __pyx_k__8[] = "?";
+static const char __pyx_k_du[] = "du";
+static const char __pyx_k_dv[] = "dv";
 static const char __pyx_k_na[] = "na";
 static const char __pyx_k_np[] = "np";
 static const char __pyx_k_nu[] = "nu";
 static const char __pyx_k_nv[] = "nv";
-static const char __pyx_k_nw[] = "nw";
 static const char __pyx_k_nx[] = "nx";
 static const char __pyx_k_ny[] = "ny";
 static const char __pyx_k_nz[] = "nz";
 static const char __pyx_k_su[] = "su";
 static const char __pyx_k_sv[] = "sv";
-static const char __pyx_k_far[] = "far";
 static const char __pyx_k_new[] = "new";
 static const char __pyx_k_s2d[] = "s2d";
 static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_name[] = "__name__";
-static const char __pyx_k_near[] = "near";
 static const char __pyx_k_spec[] = "__spec__";
 static const char __pyx_k_test[] = "__test__";
 static const char __pyx_k_numpy[] = "numpy";
 static const char __pyx_k_shape[] = "shape";
 static const char __pyx_k_import[] = "__import__";
-static const char __pyx_k_projectGPU[] = "projectGPU";
 static const char __pyx_k_ImportError[] = "ImportError";
 static const char __pyx_k_initializing[] = "_initializing";
 static const char __pyx_k_is_coroutine[] = "_is_coroutine";
-static const char __pyx_k_object_array[] = "object_array";
-static const char __pyx_k_c_object_array[] = "c_object_array";
-static const char __pyx_k_detector_array[] = "detector_array";
+static const char __pyx_k_reconstructGPU[] = "reconstructGPU";
+static const char __pyx_k_sinogram_array[] = "sinogram_array";
 static const char __pyx_k_transformation[] = "transformation";
-static const char __pyx_k_c_detector_array[] = "c_detector_array";
+static const char __pyx_k_c_sinogram_array[] = "c_sinogram_array";
 static const char __pyx_k_c_transformation[] = "c_transformation";
 static const char __pyx_k_asyncio_coroutines[] = "asyncio.coroutines";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
-static const char __pyx_k_projectConeBeamGPU[] = "projectConeBeamGPU";
-static const char __pyx_k_projectParallelBeamGPU[] = "projectParallelBeamGPU";
-static const char __pyx_k_pyCT_forward_projectGPU_pyx[] = "pyCT/forward/projectGPU.pyx";
+static const char __pyx_k_reconstruction_array[] = "reconstruction_array";
+static const char __pyx_k_c_reconstruction_array[] = "c_reconstruction_array";
+static const char __pyx_k_reconstructConeBeamGPU[] = "reconstructConeBeamGPU";
+static const char __pyx_k_reconstructParallelBeamGPU[] = "reconstructParallelBeamGPU";
 static const char __pyx_k_numpy_core_multiarray_failed_to[] = "numpy.core.multiarray failed to import";
 static const char __pyx_k_numpy_core_umath_failed_to_impor[] = "numpy.core.umath failed to import";
+static const char __pyx_k_pyCT_backward_reconstructGPU_pyx[] = "pyCT/backward/reconstructGPU.pyx";
 /* #### Code section: decls ### */
-static PyObject *__pyx_pf_10projectGPU_projectParallelBeamGPU(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_detector_array, PyArrayObject *__pyx_v_transformation, PyArrayObject *__pyx_v_object_array, int __pyx_v_nx, int __pyx_v_ny, int __pyx_v_nz, int __pyx_v_nu, int __pyx_v_nv, int __pyx_v_nw, int __pyx_v_na); /* proto */
-static PyObject *__pyx_pf_10projectGPU_2projectConeBeamGPU(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_detector_array, PyArrayObject *__pyx_v_transformation, PyArrayObject *__pyx_v_object_array, int __pyx_v_nx, int __pyx_v_ny, int __pyx_v_nz, int __pyx_v_nu, int __pyx_v_nv, int __pyx_v_nw, int __pyx_v_na, float __pyx_v_su, float __pyx_v_sv, float __pyx_v_s2d, float __pyx_v_near, float __pyx_v_far); /* proto */
+static PyObject *__pyx_pf_14reconstructGPU_reconstructParallelBeamGPU(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_reconstruction_array, PyArrayObject *__pyx_v_transformation, PyArrayObject *__pyx_v_sinogram_array, int __pyx_v_nx, int __pyx_v_ny, int __pyx_v_nz, int __pyx_v_nu, int __pyx_v_nv, int __pyx_v_na); /* proto */
+static PyObject *__pyx_pf_14reconstructGPU_2reconstructConeBeamGPU(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_reconstruction_array, PyArrayObject *__pyx_v_transformation, PyArrayObject *__pyx_v_sinogram_array, int __pyx_v_nx, int __pyx_v_ny, int __pyx_v_nz, int __pyx_v_nu, int __pyx_v_nv, int __pyx_v_na, float __pyx_v_su, float __pyx_v_sv, float __pyx_v_du, float __pyx_v_dv, float __pyx_v_s2d); /* proto */
 /* #### Code section: late_includes ### */
 /* #### Code section: module_state ### */
 typedef struct {
@@ -2644,19 +2643,18 @@ typedef struct {
   PyObject *__pyx_n_s__3;
   PyObject *__pyx_n_s__8;
   PyObject *__pyx_n_s_asyncio_coroutines;
-  PyObject *__pyx_n_s_c_detector_array;
-  PyObject *__pyx_n_s_c_object_array;
+  PyObject *__pyx_n_s_c_reconstruction_array;
+  PyObject *__pyx_n_s_c_sinogram_array;
   PyObject *__pyx_n_s_c_transformation;
   PyObject *__pyx_n_s_cline_in_traceback;
-  PyObject *__pyx_n_s_detector_array;
-  PyObject *__pyx_n_s_far;
+  PyObject *__pyx_n_s_du;
+  PyObject *__pyx_n_s_dv;
   PyObject *__pyx_n_s_import;
   PyObject *__pyx_n_s_initializing;
   PyObject *__pyx_n_s_is_coroutine;
   PyObject *__pyx_n_s_main;
   PyObject *__pyx_n_s_na;
   PyObject *__pyx_n_s_name;
-  PyObject *__pyx_n_s_near;
   PyObject *__pyx_n_s_new;
   PyObject *__pyx_n_s_np;
   PyObject *__pyx_n_s_nu;
@@ -2664,17 +2662,17 @@ typedef struct {
   PyObject *__pyx_kp_s_numpy_core_multiarray_failed_to;
   PyObject *__pyx_kp_s_numpy_core_umath_failed_to_impor;
   PyObject *__pyx_n_s_nv;
-  PyObject *__pyx_n_s_nw;
   PyObject *__pyx_n_s_nx;
   PyObject *__pyx_n_s_ny;
   PyObject *__pyx_n_s_nz;
-  PyObject *__pyx_n_s_object_array;
-  PyObject *__pyx_n_s_projectConeBeamGPU;
-  PyObject *__pyx_n_s_projectGPU;
-  PyObject *__pyx_n_s_projectParallelBeamGPU;
-  PyObject *__pyx_kp_s_pyCT_forward_projectGPU_pyx;
+  PyObject *__pyx_kp_s_pyCT_backward_reconstructGPU_pyx;
+  PyObject *__pyx_n_s_reconstructConeBeamGPU;
+  PyObject *__pyx_n_s_reconstructGPU;
+  PyObject *__pyx_n_s_reconstructParallelBeamGPU;
+  PyObject *__pyx_n_s_reconstruction_array;
   PyObject *__pyx_n_s_s2d;
   PyObject *__pyx_n_s_shape;
+  PyObject *__pyx_n_s_sinogram_array;
   PyObject *__pyx_n_s_spec;
   PyObject *__pyx_n_s_su;
   PyObject *__pyx_n_s_sv;
@@ -2748,19 +2746,18 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_n_s__3);
   Py_CLEAR(clear_module_state->__pyx_n_s__8);
   Py_CLEAR(clear_module_state->__pyx_n_s_asyncio_coroutines);
-  Py_CLEAR(clear_module_state->__pyx_n_s_c_detector_array);
-  Py_CLEAR(clear_module_state->__pyx_n_s_c_object_array);
+  Py_CLEAR(clear_module_state->__pyx_n_s_c_reconstruction_array);
+  Py_CLEAR(clear_module_state->__pyx_n_s_c_sinogram_array);
   Py_CLEAR(clear_module_state->__pyx_n_s_c_transformation);
   Py_CLEAR(clear_module_state->__pyx_n_s_cline_in_traceback);
-  Py_CLEAR(clear_module_state->__pyx_n_s_detector_array);
-  Py_CLEAR(clear_module_state->__pyx_n_s_far);
+  Py_CLEAR(clear_module_state->__pyx_n_s_du);
+  Py_CLEAR(clear_module_state->__pyx_n_s_dv);
   Py_CLEAR(clear_module_state->__pyx_n_s_import);
   Py_CLEAR(clear_module_state->__pyx_n_s_initializing);
   Py_CLEAR(clear_module_state->__pyx_n_s_is_coroutine);
   Py_CLEAR(clear_module_state->__pyx_n_s_main);
   Py_CLEAR(clear_module_state->__pyx_n_s_na);
   Py_CLEAR(clear_module_state->__pyx_n_s_name);
-  Py_CLEAR(clear_module_state->__pyx_n_s_near);
   Py_CLEAR(clear_module_state->__pyx_n_s_new);
   Py_CLEAR(clear_module_state->__pyx_n_s_np);
   Py_CLEAR(clear_module_state->__pyx_n_s_nu);
@@ -2768,17 +2765,17 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_kp_s_numpy_core_multiarray_failed_to);
   Py_CLEAR(clear_module_state->__pyx_kp_s_numpy_core_umath_failed_to_impor);
   Py_CLEAR(clear_module_state->__pyx_n_s_nv);
-  Py_CLEAR(clear_module_state->__pyx_n_s_nw);
   Py_CLEAR(clear_module_state->__pyx_n_s_nx);
   Py_CLEAR(clear_module_state->__pyx_n_s_ny);
   Py_CLEAR(clear_module_state->__pyx_n_s_nz);
-  Py_CLEAR(clear_module_state->__pyx_n_s_object_array);
-  Py_CLEAR(clear_module_state->__pyx_n_s_projectConeBeamGPU);
-  Py_CLEAR(clear_module_state->__pyx_n_s_projectGPU);
-  Py_CLEAR(clear_module_state->__pyx_n_s_projectParallelBeamGPU);
-  Py_CLEAR(clear_module_state->__pyx_kp_s_pyCT_forward_projectGPU_pyx);
+  Py_CLEAR(clear_module_state->__pyx_kp_s_pyCT_backward_reconstructGPU_pyx);
+  Py_CLEAR(clear_module_state->__pyx_n_s_reconstructConeBeamGPU);
+  Py_CLEAR(clear_module_state->__pyx_n_s_reconstructGPU);
+  Py_CLEAR(clear_module_state->__pyx_n_s_reconstructParallelBeamGPU);
+  Py_CLEAR(clear_module_state->__pyx_n_s_reconstruction_array);
   Py_CLEAR(clear_module_state->__pyx_n_s_s2d);
   Py_CLEAR(clear_module_state->__pyx_n_s_shape);
+  Py_CLEAR(clear_module_state->__pyx_n_s_sinogram_array);
   Py_CLEAR(clear_module_state->__pyx_n_s_spec);
   Py_CLEAR(clear_module_state->__pyx_n_s_su);
   Py_CLEAR(clear_module_state->__pyx_n_s_sv);
@@ -2830,19 +2827,18 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_n_s__3);
   Py_VISIT(traverse_module_state->__pyx_n_s__8);
   Py_VISIT(traverse_module_state->__pyx_n_s_asyncio_coroutines);
-  Py_VISIT(traverse_module_state->__pyx_n_s_c_detector_array);
-  Py_VISIT(traverse_module_state->__pyx_n_s_c_object_array);
+  Py_VISIT(traverse_module_state->__pyx_n_s_c_reconstruction_array);
+  Py_VISIT(traverse_module_state->__pyx_n_s_c_sinogram_array);
   Py_VISIT(traverse_module_state->__pyx_n_s_c_transformation);
   Py_VISIT(traverse_module_state->__pyx_n_s_cline_in_traceback);
-  Py_VISIT(traverse_module_state->__pyx_n_s_detector_array);
-  Py_VISIT(traverse_module_state->__pyx_n_s_far);
+  Py_VISIT(traverse_module_state->__pyx_n_s_du);
+  Py_VISIT(traverse_module_state->__pyx_n_s_dv);
   Py_VISIT(traverse_module_state->__pyx_n_s_import);
   Py_VISIT(traverse_module_state->__pyx_n_s_initializing);
   Py_VISIT(traverse_module_state->__pyx_n_s_is_coroutine);
   Py_VISIT(traverse_module_state->__pyx_n_s_main);
   Py_VISIT(traverse_module_state->__pyx_n_s_na);
   Py_VISIT(traverse_module_state->__pyx_n_s_name);
-  Py_VISIT(traverse_module_state->__pyx_n_s_near);
   Py_VISIT(traverse_module_state->__pyx_n_s_new);
   Py_VISIT(traverse_module_state->__pyx_n_s_np);
   Py_VISIT(traverse_module_state->__pyx_n_s_nu);
@@ -2850,17 +2846,17 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_kp_s_numpy_core_multiarray_failed_to);
   Py_VISIT(traverse_module_state->__pyx_kp_s_numpy_core_umath_failed_to_impor);
   Py_VISIT(traverse_module_state->__pyx_n_s_nv);
-  Py_VISIT(traverse_module_state->__pyx_n_s_nw);
   Py_VISIT(traverse_module_state->__pyx_n_s_nx);
   Py_VISIT(traverse_module_state->__pyx_n_s_ny);
   Py_VISIT(traverse_module_state->__pyx_n_s_nz);
-  Py_VISIT(traverse_module_state->__pyx_n_s_object_array);
-  Py_VISIT(traverse_module_state->__pyx_n_s_projectConeBeamGPU);
-  Py_VISIT(traverse_module_state->__pyx_n_s_projectGPU);
-  Py_VISIT(traverse_module_state->__pyx_n_s_projectParallelBeamGPU);
-  Py_VISIT(traverse_module_state->__pyx_kp_s_pyCT_forward_projectGPU_pyx);
+  Py_VISIT(traverse_module_state->__pyx_kp_s_pyCT_backward_reconstructGPU_pyx);
+  Py_VISIT(traverse_module_state->__pyx_n_s_reconstructConeBeamGPU);
+  Py_VISIT(traverse_module_state->__pyx_n_s_reconstructGPU);
+  Py_VISIT(traverse_module_state->__pyx_n_s_reconstructParallelBeamGPU);
+  Py_VISIT(traverse_module_state->__pyx_n_s_reconstruction_array);
   Py_VISIT(traverse_module_state->__pyx_n_s_s2d);
   Py_VISIT(traverse_module_state->__pyx_n_s_shape);
+  Py_VISIT(traverse_module_state->__pyx_n_s_sinogram_array);
   Py_VISIT(traverse_module_state->__pyx_n_s_spec);
   Py_VISIT(traverse_module_state->__pyx_n_s_su);
   Py_VISIT(traverse_module_state->__pyx_n_s_sv);
@@ -2940,19 +2936,18 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_n_s__3 __pyx_mstate_global->__pyx_n_s__3
 #define __pyx_n_s__8 __pyx_mstate_global->__pyx_n_s__8
 #define __pyx_n_s_asyncio_coroutines __pyx_mstate_global->__pyx_n_s_asyncio_coroutines
-#define __pyx_n_s_c_detector_array __pyx_mstate_global->__pyx_n_s_c_detector_array
-#define __pyx_n_s_c_object_array __pyx_mstate_global->__pyx_n_s_c_object_array
+#define __pyx_n_s_c_reconstruction_array __pyx_mstate_global->__pyx_n_s_c_reconstruction_array
+#define __pyx_n_s_c_sinogram_array __pyx_mstate_global->__pyx_n_s_c_sinogram_array
 #define __pyx_n_s_c_transformation __pyx_mstate_global->__pyx_n_s_c_transformation
 #define __pyx_n_s_cline_in_traceback __pyx_mstate_global->__pyx_n_s_cline_in_traceback
-#define __pyx_n_s_detector_array __pyx_mstate_global->__pyx_n_s_detector_array
-#define __pyx_n_s_far __pyx_mstate_global->__pyx_n_s_far
+#define __pyx_n_s_du __pyx_mstate_global->__pyx_n_s_du
+#define __pyx_n_s_dv __pyx_mstate_global->__pyx_n_s_dv
 #define __pyx_n_s_import __pyx_mstate_global->__pyx_n_s_import
 #define __pyx_n_s_initializing __pyx_mstate_global->__pyx_n_s_initializing
 #define __pyx_n_s_is_coroutine __pyx_mstate_global->__pyx_n_s_is_coroutine
 #define __pyx_n_s_main __pyx_mstate_global->__pyx_n_s_main
 #define __pyx_n_s_na __pyx_mstate_global->__pyx_n_s_na
 #define __pyx_n_s_name __pyx_mstate_global->__pyx_n_s_name
-#define __pyx_n_s_near __pyx_mstate_global->__pyx_n_s_near
 #define __pyx_n_s_new __pyx_mstate_global->__pyx_n_s_new
 #define __pyx_n_s_np __pyx_mstate_global->__pyx_n_s_np
 #define __pyx_n_s_nu __pyx_mstate_global->__pyx_n_s_nu
@@ -2960,17 +2955,17 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_kp_s_numpy_core_multiarray_failed_to __pyx_mstate_global->__pyx_kp_s_numpy_core_multiarray_failed_to
 #define __pyx_kp_s_numpy_core_umath_failed_to_impor __pyx_mstate_global->__pyx_kp_s_numpy_core_umath_failed_to_impor
 #define __pyx_n_s_nv __pyx_mstate_global->__pyx_n_s_nv
-#define __pyx_n_s_nw __pyx_mstate_global->__pyx_n_s_nw
 #define __pyx_n_s_nx __pyx_mstate_global->__pyx_n_s_nx
 #define __pyx_n_s_ny __pyx_mstate_global->__pyx_n_s_ny
 #define __pyx_n_s_nz __pyx_mstate_global->__pyx_n_s_nz
-#define __pyx_n_s_object_array __pyx_mstate_global->__pyx_n_s_object_array
-#define __pyx_n_s_projectConeBeamGPU __pyx_mstate_global->__pyx_n_s_projectConeBeamGPU
-#define __pyx_n_s_projectGPU __pyx_mstate_global->__pyx_n_s_projectGPU
-#define __pyx_n_s_projectParallelBeamGPU __pyx_mstate_global->__pyx_n_s_projectParallelBeamGPU
-#define __pyx_kp_s_pyCT_forward_projectGPU_pyx __pyx_mstate_global->__pyx_kp_s_pyCT_forward_projectGPU_pyx
+#define __pyx_kp_s_pyCT_backward_reconstructGPU_pyx __pyx_mstate_global->__pyx_kp_s_pyCT_backward_reconstructGPU_pyx
+#define __pyx_n_s_reconstructConeBeamGPU __pyx_mstate_global->__pyx_n_s_reconstructConeBeamGPU
+#define __pyx_n_s_reconstructGPU __pyx_mstate_global->__pyx_n_s_reconstructGPU
+#define __pyx_n_s_reconstructParallelBeamGPU __pyx_mstate_global->__pyx_n_s_reconstructParallelBeamGPU
+#define __pyx_n_s_reconstruction_array __pyx_mstate_global->__pyx_n_s_reconstruction_array
 #define __pyx_n_s_s2d __pyx_mstate_global->__pyx_n_s_s2d
 #define __pyx_n_s_shape __pyx_mstate_global->__pyx_n_s_shape
+#define __pyx_n_s_sinogram_array __pyx_mstate_global->__pyx_n_s_sinogram_array
 #define __pyx_n_s_spec __pyx_mstate_global->__pyx_n_s_spec
 #define __pyx_n_s_su __pyx_mstate_global->__pyx_n_s_su
 #define __pyx_n_s_sv __pyx_mstate_global->__pyx_n_s_sv
@@ -4246,51 +4241,50 @@ static CYTHON_INLINE NPY_DATETIMEUNIT __pyx_f_5numpy_get_datetime64_unit(PyObjec
   return __pyx_r;
 }
 
-/* "projectGPU.pyx":12
+/* "reconstructGPU.pyx":11
+ *     void funcConeBeam(float *reconstruction_array, float *transformation, float *sinogram_array, int nx, int ny, int nz, int nu, int nv, int na, float su, float sv, float du, float dv, float s2d);
  * 
+ * def reconstructParallelBeamGPU(cnp.ndarray[DTYPE, ndim=1] reconstruction_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] sinogram_array, int nx, int ny, int nz, int nu, int nv, int na):             # <<<<<<<<<<<<<<
  * 
- * def projectParallelBeamGPU(cnp.ndarray[DTYPE, ndim=1] detector_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na):             # <<<<<<<<<<<<<<
- * 
- *     cdef float *c_detector_array = <float *> detector_array.data
+ *     cdef float *c_reconstruction_array = <float *> reconstruction_array.data
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10projectGPU_1projectParallelBeamGPU(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_14reconstructGPU_1reconstructParallelBeamGPU(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_10projectGPU_1projectParallelBeamGPU = {"projectParallelBeamGPU", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_10projectGPU_1projectParallelBeamGPU, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_10projectGPU_1projectParallelBeamGPU(PyObject *__pyx_self, 
+static PyMethodDef __pyx_mdef_14reconstructGPU_1reconstructParallelBeamGPU = {"reconstructParallelBeamGPU", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_14reconstructGPU_1reconstructParallelBeamGPU, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_14reconstructGPU_1reconstructParallelBeamGPU(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ) {
-  PyArrayObject *__pyx_v_detector_array = 0;
+  PyArrayObject *__pyx_v_reconstruction_array = 0;
   PyArrayObject *__pyx_v_transformation = 0;
-  PyArrayObject *__pyx_v_object_array = 0;
+  PyArrayObject *__pyx_v_sinogram_array = 0;
   int __pyx_v_nx;
   int __pyx_v_ny;
   int __pyx_v_nz;
   int __pyx_v_nu;
   int __pyx_v_nv;
-  int __pyx_v_nw;
   int __pyx_v_na;
   #if !CYTHON_METH_FASTCALL
   CYTHON_UNUSED Py_ssize_t __pyx_nargs;
   #endif
   CYTHON_UNUSED PyObject *const *__pyx_kwvalues;
-  PyObject* values[10] = {0,0,0,0,0,0,0,0,0,0};
+  PyObject* values[9] = {0,0,0,0,0,0,0,0,0};
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("projectParallelBeamGPU (wrapper)", 0);
+  __Pyx_RefNannySetupContext("reconstructParallelBeamGPU (wrapper)", 0);
   #if !CYTHON_METH_FASTCALL
   #if CYTHON_ASSUME_SAFE_MACROS
   __pyx_nargs = PyTuple_GET_SIZE(__pyx_args);
@@ -4300,12 +4294,10 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   #endif
   __pyx_kwvalues = __Pyx_KwValues_FASTCALL(__pyx_args, __pyx_nargs);
   {
-    PyObject **__pyx_pyargnames[] = {&__pyx_n_s_detector_array,&__pyx_n_s_transformation,&__pyx_n_s_object_array,&__pyx_n_s_nx,&__pyx_n_s_ny,&__pyx_n_s_nz,&__pyx_n_s_nu,&__pyx_n_s_nv,&__pyx_n_s_nw,&__pyx_n_s_na,0};
+    PyObject **__pyx_pyargnames[] = {&__pyx_n_s_reconstruction_array,&__pyx_n_s_transformation,&__pyx_n_s_sinogram_array,&__pyx_n_s_nx,&__pyx_n_s_ny,&__pyx_n_s_nz,&__pyx_n_s_nu,&__pyx_n_s_nv,&__pyx_n_s_na,0};
     if (__pyx_kwds) {
       Py_ssize_t kw_args;
       switch (__pyx_nargs) {
-        case 10: values[9] = __Pyx_Arg_FASTCALL(__pyx_args, 9);
-        CYTHON_FALLTHROUGH;
         case  9: values[8] = __Pyx_Arg_FASTCALL(__pyx_args, 8);
         CYTHON_FALLTHROUGH;
         case  8: values[7] = __Pyx_Arg_FASTCALL(__pyx_args, 7);
@@ -4330,11 +4322,11 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       kw_args = __Pyx_NumKwargs_FASTCALL(__pyx_kwds);
       switch (__pyx_nargs) {
         case  0:
-        if (likely((values[0] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_detector_array)) != 0)) {
+        if (likely((values[0] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_reconstruction_array)) != 0)) {
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 11, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -4342,19 +4334,19 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 11, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("projectParallelBeamGPU", 1, 10, 10, 1); __PYX_ERR(1, 12, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reconstructParallelBeamGPU", 1, 9, 9, 1); __PYX_ERR(1, 11, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
-        if (likely((values[2] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_object_array)) != 0)) {
+        if (likely((values[2] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_sinogram_array)) != 0)) {
           (void)__Pyx_Arg_NewRef_FASTCALL(values[2]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 11, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("projectParallelBeamGPU", 1, 10, 10, 2); __PYX_ERR(1, 12, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reconstructParallelBeamGPU", 1, 9, 9, 2); __PYX_ERR(1, 11, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -4362,9 +4354,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[3]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 11, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("projectParallelBeamGPU", 1, 10, 10, 3); __PYX_ERR(1, 12, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reconstructParallelBeamGPU", 1, 9, 9, 3); __PYX_ERR(1, 11, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
@@ -4372,9 +4364,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[4]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 11, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("projectParallelBeamGPU", 1, 10, 10, 4); __PYX_ERR(1, 12, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reconstructParallelBeamGPU", 1, 9, 9, 4); __PYX_ERR(1, 11, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
@@ -4382,9 +4374,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[5]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 11, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("projectParallelBeamGPU", 1, 10, 10, 5); __PYX_ERR(1, 12, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reconstructParallelBeamGPU", 1, 9, 9, 5); __PYX_ERR(1, 11, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
@@ -4392,9 +4384,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[6]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 11, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("projectParallelBeamGPU", 1, 10, 10, 6); __PYX_ERR(1, 12, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reconstructParallelBeamGPU", 1, 9, 9, 6); __PYX_ERR(1, 11, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
@@ -4402,36 +4394,26 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[7]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 11, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("projectParallelBeamGPU", 1, 10, 10, 7); __PYX_ERR(1, 12, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reconstructParallelBeamGPU", 1, 9, 9, 7); __PYX_ERR(1, 11, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  8:
-        if (likely((values[8] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_nw)) != 0)) {
+        if (likely((values[8] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_na)) != 0)) {
           (void)__Pyx_Arg_NewRef_FASTCALL(values[8]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 11, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("projectParallelBeamGPU", 1, 10, 10, 8); __PYX_ERR(1, 12, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case  9:
-        if (likely((values[9] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_na)) != 0)) {
-          (void)__Pyx_Arg_NewRef_FASTCALL(values[9]);
-          kw_args--;
-        }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L3_error)
-        else {
-          __Pyx_RaiseArgtupleInvalid("projectParallelBeamGPU", 1, 10, 10, 9); __PYX_ERR(1, 12, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reconstructParallelBeamGPU", 1, 9, 9, 8); __PYX_ERR(1, 11, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "projectParallelBeamGPU") < 0)) __PYX_ERR(1, 12, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "reconstructParallelBeamGPU") < 0)) __PYX_ERR(1, 11, __pyx_L3_error)
       }
-    } else if (unlikely(__pyx_nargs != 10)) {
+    } else if (unlikely(__pyx_nargs != 9)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_Arg_FASTCALL(__pyx_args, 0);
@@ -4443,22 +4425,20 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[6] = __Pyx_Arg_FASTCALL(__pyx_args, 6);
       values[7] = __Pyx_Arg_FASTCALL(__pyx_args, 7);
       values[8] = __Pyx_Arg_FASTCALL(__pyx_args, 8);
-      values[9] = __Pyx_Arg_FASTCALL(__pyx_args, 9);
     }
-    __pyx_v_detector_array = ((PyArrayObject *)values[0]);
+    __pyx_v_reconstruction_array = ((PyArrayObject *)values[0]);
     __pyx_v_transformation = ((PyArrayObject *)values[1]);
-    __pyx_v_object_array = ((PyArrayObject *)values[2]);
-    __pyx_v_nx = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_nx == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L3_error)
-    __pyx_v_ny = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_ny == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L3_error)
-    __pyx_v_nz = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_nz == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L3_error)
-    __pyx_v_nu = __Pyx_PyInt_As_int(values[6]); if (unlikely((__pyx_v_nu == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L3_error)
-    __pyx_v_nv = __Pyx_PyInt_As_int(values[7]); if (unlikely((__pyx_v_nv == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L3_error)
-    __pyx_v_nw = __Pyx_PyInt_As_int(values[8]); if (unlikely((__pyx_v_nw == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L3_error)
-    __pyx_v_na = __Pyx_PyInt_As_int(values[9]); if (unlikely((__pyx_v_na == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L3_error)
+    __pyx_v_sinogram_array = ((PyArrayObject *)values[2]);
+    __pyx_v_nx = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_nx == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 11, __pyx_L3_error)
+    __pyx_v_ny = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_ny == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 11, __pyx_L3_error)
+    __pyx_v_nz = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_nz == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 11, __pyx_L3_error)
+    __pyx_v_nu = __Pyx_PyInt_As_int(values[6]); if (unlikely((__pyx_v_nu == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 11, __pyx_L3_error)
+    __pyx_v_nv = __Pyx_PyInt_As_int(values[7]); if (unlikely((__pyx_v_nv == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 11, __pyx_L3_error)
+    __pyx_v_na = __Pyx_PyInt_As_int(values[8]); if (unlikely((__pyx_v_na == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 11, __pyx_L3_error)
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("projectParallelBeamGPU", 1, 10, 10, __pyx_nargs); __PYX_ERR(1, 12, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("reconstructParallelBeamGPU", 1, 9, 9, __pyx_nargs); __PYX_ERR(1, 11, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -4468,14 +4448,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __Pyx_Arg_XDECREF_FASTCALL(values[__pyx_temp]);
     }
   }
-  __Pyx_AddTraceback("projectGPU.projectParallelBeamGPU", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("reconstructGPU.reconstructParallelBeamGPU", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_detector_array), __pyx_ptype_5numpy_ndarray, 1, "detector_array", 0))) __PYX_ERR(1, 12, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_transformation), __pyx_ptype_5numpy_ndarray, 1, "transformation", 0))) __PYX_ERR(1, 12, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_object_array), __pyx_ptype_5numpy_ndarray, 1, "object_array", 0))) __PYX_ERR(1, 12, __pyx_L1_error)
-  __pyx_r = __pyx_pf_10projectGPU_projectParallelBeamGPU(__pyx_self, __pyx_v_detector_array, __pyx_v_transformation, __pyx_v_object_array, __pyx_v_nx, __pyx_v_ny, __pyx_v_nz, __pyx_v_nu, __pyx_v_nv, __pyx_v_nw, __pyx_v_na);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_reconstruction_array), __pyx_ptype_5numpy_ndarray, 1, "reconstruction_array", 0))) __PYX_ERR(1, 11, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_transformation), __pyx_ptype_5numpy_ndarray, 1, "transformation", 0))) __PYX_ERR(1, 11, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_sinogram_array), __pyx_ptype_5numpy_ndarray, 1, "sinogram_array", 0))) __PYX_ERR(1, 11, __pyx_L1_error)
+  __pyx_r = __pyx_pf_14reconstructGPU_reconstructParallelBeamGPU(__pyx_self, __pyx_v_reconstruction_array, __pyx_v_transformation, __pyx_v_sinogram_array, __pyx_v_nx, __pyx_v_ny, __pyx_v_nz, __pyx_v_nu, __pyx_v_nv, __pyx_v_na);
 
   /* function exit code */
   goto __pyx_L0;
@@ -4492,16 +4472,16 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10projectGPU_projectParallelBeamGPU(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_detector_array, PyArrayObject *__pyx_v_transformation, PyArrayObject *__pyx_v_object_array, int __pyx_v_nx, int __pyx_v_ny, int __pyx_v_nz, int __pyx_v_nu, int __pyx_v_nv, int __pyx_v_nw, int __pyx_v_na) {
-  float *__pyx_v_c_detector_array;
+static PyObject *__pyx_pf_14reconstructGPU_reconstructParallelBeamGPU(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_reconstruction_array, PyArrayObject *__pyx_v_transformation, PyArrayObject *__pyx_v_sinogram_array, int __pyx_v_nx, int __pyx_v_ny, int __pyx_v_nz, int __pyx_v_nu, int __pyx_v_nv, int __pyx_v_na) {
+  float *__pyx_v_c_reconstruction_array;
   float *__pyx_v_c_transformation;
-  float *__pyx_v_c_object_array;
+  float *__pyx_v_c_sinogram_array;
   npy_intp __pyx_v_shape[1];
   PyObject *__pyx_v_new = NULL;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_detector_array;
-  __Pyx_Buffer __pyx_pybuffer_detector_array;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_object_array;
-  __Pyx_Buffer __pyx_pybuffer_object_array;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_reconstruction_array;
+  __Pyx_Buffer __pyx_pybuffer_reconstruction_array;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_sinogram_array;
+  __Pyx_Buffer __pyx_pybuffer_sinogram_array;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_transformation;
   __Pyx_Buffer __pyx_pybuffer_transformation;
   PyObject *__pyx_r = NULL;
@@ -4511,113 +4491,113 @@ static PyObject *__pyx_pf_10projectGPU_projectParallelBeamGPU(CYTHON_UNUSED PyOb
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("projectParallelBeamGPU", 1);
-  __pyx_pybuffer_detector_array.pybuffer.buf = NULL;
-  __pyx_pybuffer_detector_array.refcount = 0;
-  __pyx_pybuffernd_detector_array.data = NULL;
-  __pyx_pybuffernd_detector_array.rcbuffer = &__pyx_pybuffer_detector_array;
+  __Pyx_RefNannySetupContext("reconstructParallelBeamGPU", 1);
+  __pyx_pybuffer_reconstruction_array.pybuffer.buf = NULL;
+  __pyx_pybuffer_reconstruction_array.refcount = 0;
+  __pyx_pybuffernd_reconstruction_array.data = NULL;
+  __pyx_pybuffernd_reconstruction_array.rcbuffer = &__pyx_pybuffer_reconstruction_array;
   __pyx_pybuffer_transformation.pybuffer.buf = NULL;
   __pyx_pybuffer_transformation.refcount = 0;
   __pyx_pybuffernd_transformation.data = NULL;
   __pyx_pybuffernd_transformation.rcbuffer = &__pyx_pybuffer_transformation;
-  __pyx_pybuffer_object_array.pybuffer.buf = NULL;
-  __pyx_pybuffer_object_array.refcount = 0;
-  __pyx_pybuffernd_object_array.data = NULL;
-  __pyx_pybuffernd_object_array.rcbuffer = &__pyx_pybuffer_object_array;
+  __pyx_pybuffer_sinogram_array.pybuffer.buf = NULL;
+  __pyx_pybuffer_sinogram_array.refcount = 0;
+  __pyx_pybuffernd_sinogram_array.data = NULL;
+  __pyx_pybuffernd_sinogram_array.rcbuffer = &__pyx_pybuffer_sinogram_array;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_detector_array.rcbuffer->pybuffer, (PyObject*)__pyx_v_detector_array, &__Pyx_TypeInfo_nn___pyx_t_10projectGPU_DTYPE, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 12, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_reconstruction_array.rcbuffer->pybuffer, (PyObject*)__pyx_v_reconstruction_array, &__Pyx_TypeInfo_nn___pyx_t_14reconstructGPU_DTYPE, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 11, __pyx_L1_error)
   }
-  __pyx_pybuffernd_detector_array.diminfo[0].strides = __pyx_pybuffernd_detector_array.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_detector_array.diminfo[0].shape = __pyx_pybuffernd_detector_array.rcbuffer->pybuffer.shape[0];
+  __pyx_pybuffernd_reconstruction_array.diminfo[0].strides = __pyx_pybuffernd_reconstruction_array.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_reconstruction_array.diminfo[0].shape = __pyx_pybuffernd_reconstruction_array.rcbuffer->pybuffer.shape[0];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_transformation.rcbuffer->pybuffer, (PyObject*)__pyx_v_transformation, &__Pyx_TypeInfo_nn___pyx_t_10projectGPU_DTYPE, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 12, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_transformation.rcbuffer->pybuffer, (PyObject*)__pyx_v_transformation, &__Pyx_TypeInfo_nn___pyx_t_14reconstructGPU_DTYPE, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 11, __pyx_L1_error)
   }
   __pyx_pybuffernd_transformation.diminfo[0].strides = __pyx_pybuffernd_transformation.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_transformation.diminfo[0].shape = __pyx_pybuffernd_transformation.rcbuffer->pybuffer.shape[0];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_object_array.rcbuffer->pybuffer, (PyObject*)__pyx_v_object_array, &__Pyx_TypeInfo_nn___pyx_t_10projectGPU_DTYPE, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 12, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_sinogram_array.rcbuffer->pybuffer, (PyObject*)__pyx_v_sinogram_array, &__Pyx_TypeInfo_nn___pyx_t_14reconstructGPU_DTYPE, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 11, __pyx_L1_error)
   }
-  __pyx_pybuffernd_object_array.diminfo[0].strides = __pyx_pybuffernd_object_array.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_object_array.diminfo[0].shape = __pyx_pybuffernd_object_array.rcbuffer->pybuffer.shape[0];
+  __pyx_pybuffernd_sinogram_array.diminfo[0].strides = __pyx_pybuffernd_sinogram_array.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_sinogram_array.diminfo[0].shape = __pyx_pybuffernd_sinogram_array.rcbuffer->pybuffer.shape[0];
 
-  /* "projectGPU.pyx":14
- * def projectParallelBeamGPU(cnp.ndarray[DTYPE, ndim=1] detector_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na):
+  /* "reconstructGPU.pyx":13
+ * def reconstructParallelBeamGPU(cnp.ndarray[DTYPE, ndim=1] reconstruction_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] sinogram_array, int nx, int ny, int nz, int nu, int nv, int na):
  * 
- *     cdef float *c_detector_array = <float *> detector_array.data             # <<<<<<<<<<<<<<
+ *     cdef float *c_reconstruction_array = <float *> reconstruction_array.data             # <<<<<<<<<<<<<<
  *     cdef float *c_transformation = <float *> transformation.data
- *     cdef float *c_object_array = <float *> object_array.data
+ *     cdef float *c_sinogram_array = <float *> sinogram_array.data
  */
-  __pyx_t_1 = __pyx_f_5numpy_7ndarray_4data_data(((PyArrayObject *)__pyx_v_detector_array)); if (unlikely(__pyx_t_1 == ((char *)NULL) && PyErr_Occurred())) __PYX_ERR(1, 14, __pyx_L1_error)
-  __pyx_v_c_detector_array = ((float *)__pyx_t_1);
+  __pyx_t_1 = __pyx_f_5numpy_7ndarray_4data_data(((PyArrayObject *)__pyx_v_reconstruction_array)); if (unlikely(__pyx_t_1 == ((char *)NULL) && PyErr_Occurred())) __PYX_ERR(1, 13, __pyx_L1_error)
+  __pyx_v_c_reconstruction_array = ((float *)__pyx_t_1);
 
-  /* "projectGPU.pyx":15
+  /* "reconstructGPU.pyx":14
  * 
- *     cdef float *c_detector_array = <float *> detector_array.data
+ *     cdef float *c_reconstruction_array = <float *> reconstruction_array.data
  *     cdef float *c_transformation = <float *> transformation.data             # <<<<<<<<<<<<<<
- *     cdef float *c_object_array = <float *> object_array.data
+ *     cdef float *c_sinogram_array = <float *> sinogram_array.data
  * 
  */
-  __pyx_t_1 = __pyx_f_5numpy_7ndarray_4data_data(((PyArrayObject *)__pyx_v_transformation)); if (unlikely(__pyx_t_1 == ((char *)NULL) && PyErr_Occurred())) __PYX_ERR(1, 15, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5numpy_7ndarray_4data_data(((PyArrayObject *)__pyx_v_transformation)); if (unlikely(__pyx_t_1 == ((char *)NULL) && PyErr_Occurred())) __PYX_ERR(1, 14, __pyx_L1_error)
   __pyx_v_c_transformation = ((float *)__pyx_t_1);
 
-  /* "projectGPU.pyx":16
- *     cdef float *c_detector_array = <float *> detector_array.data
+  /* "reconstructGPU.pyx":15
+ *     cdef float *c_reconstruction_array = <float *> reconstruction_array.data
  *     cdef float *c_transformation = <float *> transformation.data
- *     cdef float *c_object_array = <float *> object_array.data             # <<<<<<<<<<<<<<
+ *     cdef float *c_sinogram_array = <float *> sinogram_array.data             # <<<<<<<<<<<<<<
  * 
- *     funcParallelBeam(c_detector_array, c_transformation, c_object_array, nx, ny, nz, nu, nv, nw, na)
+ *     funcParallelBeam(c_reconstruction_array, c_transformation, c_sinogram_array, nx, ny, nz, nu, nv, na)
  */
-  __pyx_t_1 = __pyx_f_5numpy_7ndarray_4data_data(((PyArrayObject *)__pyx_v_object_array)); if (unlikely(__pyx_t_1 == ((char *)NULL) && PyErr_Occurred())) __PYX_ERR(1, 16, __pyx_L1_error)
-  __pyx_v_c_object_array = ((float *)__pyx_t_1);
+  __pyx_t_1 = __pyx_f_5numpy_7ndarray_4data_data(((PyArrayObject *)__pyx_v_sinogram_array)); if (unlikely(__pyx_t_1 == ((char *)NULL) && PyErr_Occurred())) __PYX_ERR(1, 15, __pyx_L1_error)
+  __pyx_v_c_sinogram_array = ((float *)__pyx_t_1);
 
-  /* "projectGPU.pyx":18
- *     cdef float *c_object_array = <float *> object_array.data
+  /* "reconstructGPU.pyx":17
+ *     cdef float *c_sinogram_array = <float *> sinogram_array.data
  * 
- *     funcParallelBeam(c_detector_array, c_transformation, c_object_array, nx, ny, nz, nu, nv, nw, na)             # <<<<<<<<<<<<<<
+ *     funcParallelBeam(c_reconstruction_array, c_transformation, c_sinogram_array, nx, ny, nz, nu, nv, na)             # <<<<<<<<<<<<<<
  * 
  *     cdef cnp.npy_intp shape[1]
  */
-  funcParallelBeam(__pyx_v_c_detector_array, __pyx_v_c_transformation, __pyx_v_c_object_array, __pyx_v_nx, __pyx_v_ny, __pyx_v_nz, __pyx_v_nu, __pyx_v_nv, __pyx_v_nw, __pyx_v_na);
+  funcParallelBeam(__pyx_v_c_reconstruction_array, __pyx_v_c_transformation, __pyx_v_c_sinogram_array, __pyx_v_nx, __pyx_v_ny, __pyx_v_nz, __pyx_v_nu, __pyx_v_nv, __pyx_v_na);
 
-  /* "projectGPU.pyx":21
+  /* "reconstructGPU.pyx":20
  * 
  *     cdef cnp.npy_intp shape[1]
- *     shape[0] = <cnp.npy_intp> (na*nv*nu)             # <<<<<<<<<<<<<<
+ *     shape[0] = <cnp.npy_intp> (nx*ny*nz)             # <<<<<<<<<<<<<<
  * 
- *     new = cnp.PyArray_SimpleNewFromData(1, shape, cnp.NPY_FLOAT32, c_detector_array)
+ *     new = cnp.PyArray_SimpleNewFromData(1, shape, cnp.NPY_FLOAT32, c_reconstruction_array)
  */
-  (__pyx_v_shape[0]) = ((npy_intp)((__pyx_v_na * __pyx_v_nv) * __pyx_v_nu));
+  (__pyx_v_shape[0]) = ((npy_intp)((__pyx_v_nx * __pyx_v_ny) * __pyx_v_nz));
 
-  /* "projectGPU.pyx":23
- *     shape[0] = <cnp.npy_intp> (na*nv*nu)
+  /* "reconstructGPU.pyx":22
+ *     shape[0] = <cnp.npy_intp> (nx*ny*nz)
  * 
- *     new = cnp.PyArray_SimpleNewFromData(1, shape, cnp.NPY_FLOAT32, c_detector_array)             # <<<<<<<<<<<<<<
+ *     new = cnp.PyArray_SimpleNewFromData(1, shape, cnp.NPY_FLOAT32, c_reconstruction_array)             # <<<<<<<<<<<<<<
  * 
  *     return new
  */
-  __pyx_t_2 = PyArray_SimpleNewFromData(1, __pyx_v_shape, NPY_FLOAT32, __pyx_v_c_detector_array); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 23, __pyx_L1_error)
+  __pyx_t_2 = PyArray_SimpleNewFromData(1, __pyx_v_shape, NPY_FLOAT32, __pyx_v_c_reconstruction_array); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 22, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_v_new = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "projectGPU.pyx":25
- *     new = cnp.PyArray_SimpleNewFromData(1, shape, cnp.NPY_FLOAT32, c_detector_array)
+  /* "reconstructGPU.pyx":24
+ *     new = cnp.PyArray_SimpleNewFromData(1, shape, cnp.NPY_FLOAT32, c_reconstruction_array)
  * 
  *     return new             # <<<<<<<<<<<<<<
  * 
- * 
+ * def reconstructConeBeamGPU(cnp.ndarray[DTYPE, ndim=1] reconstruction_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] sinogram_array, int nx, int ny, int nz, int nu, int nv, int na, float su, float sv, float du, float dv, float s2d):
  */
   __Pyx_XDECREF(__pyx_r);
   __Pyx_INCREF(__pyx_v_new);
   __pyx_r = __pyx_v_new;
   goto __pyx_L0;
 
-  /* "projectGPU.pyx":12
+  /* "reconstructGPU.pyx":11
+ *     void funcConeBeam(float *reconstruction_array, float *transformation, float *sinogram_array, int nx, int ny, int nz, int nu, int nv, int na, float su, float sv, float du, float dv, float s2d);
  * 
+ * def reconstructParallelBeamGPU(cnp.ndarray[DTYPE, ndim=1] reconstruction_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] sinogram_array, int nx, int ny, int nz, int nu, int nv, int na):             # <<<<<<<<<<<<<<
  * 
- * def projectParallelBeamGPU(cnp.ndarray[DTYPE, ndim=1] detector_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na):             # <<<<<<<<<<<<<<
- * 
- *     cdef float *c_detector_array = <float *> detector_array.data
+ *     cdef float *c_reconstruction_array = <float *> reconstruction_array.data
  */
 
   /* function exit code */
@@ -4627,16 +4607,16 @@ static PyObject *__pyx_pf_10projectGPU_projectParallelBeamGPU(CYTHON_UNUSED PyOb
     __Pyx_PyThreadState_declare
     __Pyx_PyThreadState_assign
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_detector_array.rcbuffer->pybuffer);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_object_array.rcbuffer->pybuffer);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_reconstruction_array.rcbuffer->pybuffer);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_sinogram_array.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_transformation.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("projectGPU.projectParallelBeamGPU", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("reconstructGPU.reconstructParallelBeamGPU", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_detector_array.rcbuffer->pybuffer);
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_object_array.rcbuffer->pybuffer);
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_reconstruction_array.rcbuffer->pybuffer);
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_sinogram_array.rcbuffer->pybuffer);
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_transformation.rcbuffer->pybuffer);
   __pyx_L2:;
   __Pyx_XDECREF(__pyx_v_new);
@@ -4645,56 +4625,55 @@ static PyObject *__pyx_pf_10projectGPU_projectParallelBeamGPU(CYTHON_UNUSED PyOb
   return __pyx_r;
 }
 
-/* "projectGPU.pyx":28
+/* "reconstructGPU.pyx":26
+ *     return new
  * 
+ * def reconstructConeBeamGPU(cnp.ndarray[DTYPE, ndim=1] reconstruction_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] sinogram_array, int nx, int ny, int nz, int nu, int nv, int na, float su, float sv, float du, float dv, float s2d):             # <<<<<<<<<<<<<<
  * 
- * def projectConeBeamGPU(cnp.ndarray[DTYPE, ndim=1] detector_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na, float su, float sv, float s2d, float near, float far):             # <<<<<<<<<<<<<<
- * 
- *     cdef float *c_detector_array = <float *> detector_array.data
+ *     cdef float *c_reconstruction_array = <float *> reconstruction_array.data
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10projectGPU_3projectConeBeamGPU(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_14reconstructGPU_3reconstructConeBeamGPU(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_10projectGPU_3projectConeBeamGPU = {"projectConeBeamGPU", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_10projectGPU_3projectConeBeamGPU, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_10projectGPU_3projectConeBeamGPU(PyObject *__pyx_self, 
+static PyMethodDef __pyx_mdef_14reconstructGPU_3reconstructConeBeamGPU = {"reconstructConeBeamGPU", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_14reconstructGPU_3reconstructConeBeamGPU, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_14reconstructGPU_3reconstructConeBeamGPU(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ) {
-  PyArrayObject *__pyx_v_detector_array = 0;
+  PyArrayObject *__pyx_v_reconstruction_array = 0;
   PyArrayObject *__pyx_v_transformation = 0;
-  PyArrayObject *__pyx_v_object_array = 0;
+  PyArrayObject *__pyx_v_sinogram_array = 0;
   int __pyx_v_nx;
   int __pyx_v_ny;
   int __pyx_v_nz;
   int __pyx_v_nu;
   int __pyx_v_nv;
-  int __pyx_v_nw;
   int __pyx_v_na;
   float __pyx_v_su;
   float __pyx_v_sv;
+  float __pyx_v_du;
+  float __pyx_v_dv;
   float __pyx_v_s2d;
-  float __pyx_v_near;
-  float __pyx_v_far;
   #if !CYTHON_METH_FASTCALL
   CYTHON_UNUSED Py_ssize_t __pyx_nargs;
   #endif
   CYTHON_UNUSED PyObject *const *__pyx_kwvalues;
-  PyObject* values[15] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  PyObject* values[14] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0};
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("projectConeBeamGPU (wrapper)", 0);
+  __Pyx_RefNannySetupContext("reconstructConeBeamGPU (wrapper)", 0);
   #if !CYTHON_METH_FASTCALL
   #if CYTHON_ASSUME_SAFE_MACROS
   __pyx_nargs = PyTuple_GET_SIZE(__pyx_args);
@@ -4704,12 +4683,10 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   #endif
   __pyx_kwvalues = __Pyx_KwValues_FASTCALL(__pyx_args, __pyx_nargs);
   {
-    PyObject **__pyx_pyargnames[] = {&__pyx_n_s_detector_array,&__pyx_n_s_transformation,&__pyx_n_s_object_array,&__pyx_n_s_nx,&__pyx_n_s_ny,&__pyx_n_s_nz,&__pyx_n_s_nu,&__pyx_n_s_nv,&__pyx_n_s_nw,&__pyx_n_s_na,&__pyx_n_s_su,&__pyx_n_s_sv,&__pyx_n_s_s2d,&__pyx_n_s_near,&__pyx_n_s_far,0};
+    PyObject **__pyx_pyargnames[] = {&__pyx_n_s_reconstruction_array,&__pyx_n_s_transformation,&__pyx_n_s_sinogram_array,&__pyx_n_s_nx,&__pyx_n_s_ny,&__pyx_n_s_nz,&__pyx_n_s_nu,&__pyx_n_s_nv,&__pyx_n_s_na,&__pyx_n_s_su,&__pyx_n_s_sv,&__pyx_n_s_du,&__pyx_n_s_dv,&__pyx_n_s_s2d,0};
     if (__pyx_kwds) {
       Py_ssize_t kw_args;
       switch (__pyx_nargs) {
-        case 15: values[14] = __Pyx_Arg_FASTCALL(__pyx_args, 14);
-        CYTHON_FALLTHROUGH;
         case 14: values[13] = __Pyx_Arg_FASTCALL(__pyx_args, 13);
         CYTHON_FALLTHROUGH;
         case 13: values[12] = __Pyx_Arg_FASTCALL(__pyx_args, 12);
@@ -4744,11 +4721,11 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       kw_args = __Pyx_NumKwargs_FASTCALL(__pyx_kwds);
       switch (__pyx_nargs) {
         case  0:
-        if (likely((values[0] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_detector_array)) != 0)) {
+        if (likely((values[0] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_reconstruction_array)) != 0)) {
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -4756,19 +4733,19 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("projectConeBeamGPU", 1, 15, 15, 1); __PYX_ERR(1, 28, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reconstructConeBeamGPU", 1, 14, 14, 1); __PYX_ERR(1, 26, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
-        if (likely((values[2] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_object_array)) != 0)) {
+        if (likely((values[2] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_sinogram_array)) != 0)) {
           (void)__Pyx_Arg_NewRef_FASTCALL(values[2]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("projectConeBeamGPU", 1, 15, 15, 2); __PYX_ERR(1, 28, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reconstructConeBeamGPU", 1, 14, 14, 2); __PYX_ERR(1, 26, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -4776,9 +4753,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[3]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("projectConeBeamGPU", 1, 15, 15, 3); __PYX_ERR(1, 28, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reconstructConeBeamGPU", 1, 14, 14, 3); __PYX_ERR(1, 26, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
@@ -4786,9 +4763,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[4]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("projectConeBeamGPU", 1, 15, 15, 4); __PYX_ERR(1, 28, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reconstructConeBeamGPU", 1, 14, 14, 4); __PYX_ERR(1, 26, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
@@ -4796,9 +4773,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[5]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("projectConeBeamGPU", 1, 15, 15, 5); __PYX_ERR(1, 28, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reconstructConeBeamGPU", 1, 14, 14, 5); __PYX_ERR(1, 26, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
@@ -4806,9 +4783,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[6]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("projectConeBeamGPU", 1, 15, 15, 6); __PYX_ERR(1, 28, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reconstructConeBeamGPU", 1, 14, 14, 6); __PYX_ERR(1, 26, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
@@ -4816,86 +4793,76 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[7]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("projectConeBeamGPU", 1, 15, 15, 7); __PYX_ERR(1, 28, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reconstructConeBeamGPU", 1, 14, 14, 7); __PYX_ERR(1, 26, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  8:
-        if (likely((values[8] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_nw)) != 0)) {
+        if (likely((values[8] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_na)) != 0)) {
           (void)__Pyx_Arg_NewRef_FASTCALL(values[8]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("projectConeBeamGPU", 1, 15, 15, 8); __PYX_ERR(1, 28, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reconstructConeBeamGPU", 1, 14, 14, 8); __PYX_ERR(1, 26, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  9:
-        if (likely((values[9] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_na)) != 0)) {
+        if (likely((values[9] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_su)) != 0)) {
           (void)__Pyx_Arg_NewRef_FASTCALL(values[9]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("projectConeBeamGPU", 1, 15, 15, 9); __PYX_ERR(1, 28, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reconstructConeBeamGPU", 1, 14, 14, 9); __PYX_ERR(1, 26, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case 10:
-        if (likely((values[10] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_su)) != 0)) {
+        if (likely((values[10] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_sv)) != 0)) {
           (void)__Pyx_Arg_NewRef_FASTCALL(values[10]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("projectConeBeamGPU", 1, 15, 15, 10); __PYX_ERR(1, 28, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reconstructConeBeamGPU", 1, 14, 14, 10); __PYX_ERR(1, 26, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case 11:
-        if (likely((values[11] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_sv)) != 0)) {
+        if (likely((values[11] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_du)) != 0)) {
           (void)__Pyx_Arg_NewRef_FASTCALL(values[11]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("projectConeBeamGPU", 1, 15, 15, 11); __PYX_ERR(1, 28, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reconstructConeBeamGPU", 1, 14, 14, 11); __PYX_ERR(1, 26, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case 12:
-        if (likely((values[12] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_s2d)) != 0)) {
+        if (likely((values[12] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_dv)) != 0)) {
           (void)__Pyx_Arg_NewRef_FASTCALL(values[12]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("projectConeBeamGPU", 1, 15, 15, 12); __PYX_ERR(1, 28, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reconstructConeBeamGPU", 1, 14, 14, 12); __PYX_ERR(1, 26, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case 13:
-        if (likely((values[13] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_near)) != 0)) {
+        if (likely((values[13] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_s2d)) != 0)) {
           (void)__Pyx_Arg_NewRef_FASTCALL(values[13]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("projectConeBeamGPU", 1, 15, 15, 13); __PYX_ERR(1, 28, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case 14:
-        if (likely((values[14] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_far)) != 0)) {
-          (void)__Pyx_Arg_NewRef_FASTCALL(values[14]);
-          kw_args--;
-        }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
-        else {
-          __Pyx_RaiseArgtupleInvalid("projectConeBeamGPU", 1, 15, 15, 14); __PYX_ERR(1, 28, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reconstructConeBeamGPU", 1, 14, 14, 13); __PYX_ERR(1, 26, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "projectConeBeamGPU") < 0)) __PYX_ERR(1, 28, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "reconstructConeBeamGPU") < 0)) __PYX_ERR(1, 26, __pyx_L3_error)
       }
-    } else if (unlikely(__pyx_nargs != 15)) {
+    } else if (unlikely(__pyx_nargs != 14)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_Arg_FASTCALL(__pyx_args, 0);
@@ -4912,27 +4879,25 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[11] = __Pyx_Arg_FASTCALL(__pyx_args, 11);
       values[12] = __Pyx_Arg_FASTCALL(__pyx_args, 12);
       values[13] = __Pyx_Arg_FASTCALL(__pyx_args, 13);
-      values[14] = __Pyx_Arg_FASTCALL(__pyx_args, 14);
     }
-    __pyx_v_detector_array = ((PyArrayObject *)values[0]);
+    __pyx_v_reconstruction_array = ((PyArrayObject *)values[0]);
     __pyx_v_transformation = ((PyArrayObject *)values[1]);
-    __pyx_v_object_array = ((PyArrayObject *)values[2]);
-    __pyx_v_nx = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_nx == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
-    __pyx_v_ny = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_ny == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
-    __pyx_v_nz = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_nz == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
-    __pyx_v_nu = __Pyx_PyInt_As_int(values[6]); if (unlikely((__pyx_v_nu == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
-    __pyx_v_nv = __Pyx_PyInt_As_int(values[7]); if (unlikely((__pyx_v_nv == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
-    __pyx_v_nw = __Pyx_PyInt_As_int(values[8]); if (unlikely((__pyx_v_nw == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
-    __pyx_v_na = __Pyx_PyInt_As_int(values[9]); if (unlikely((__pyx_v_na == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
-    __pyx_v_su = __pyx_PyFloat_AsFloat(values[10]); if (unlikely((__pyx_v_su == (float)-1) && PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
-    __pyx_v_sv = __pyx_PyFloat_AsFloat(values[11]); if (unlikely((__pyx_v_sv == (float)-1) && PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
-    __pyx_v_s2d = __pyx_PyFloat_AsFloat(values[12]); if (unlikely((__pyx_v_s2d == (float)-1) && PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
-    __pyx_v_near = __pyx_PyFloat_AsFloat(values[13]); if (unlikely((__pyx_v_near == (float)-1) && PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
-    __pyx_v_far = __pyx_PyFloat_AsFloat(values[14]); if (unlikely((__pyx_v_far == (float)-1) && PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
+    __pyx_v_sinogram_array = ((PyArrayObject *)values[2]);
+    __pyx_v_nx = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_nx == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
+    __pyx_v_ny = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_ny == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
+    __pyx_v_nz = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_nz == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
+    __pyx_v_nu = __Pyx_PyInt_As_int(values[6]); if (unlikely((__pyx_v_nu == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
+    __pyx_v_nv = __Pyx_PyInt_As_int(values[7]); if (unlikely((__pyx_v_nv == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
+    __pyx_v_na = __Pyx_PyInt_As_int(values[8]); if (unlikely((__pyx_v_na == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
+    __pyx_v_su = __pyx_PyFloat_AsFloat(values[9]); if (unlikely((__pyx_v_su == (float)-1) && PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
+    __pyx_v_sv = __pyx_PyFloat_AsFloat(values[10]); if (unlikely((__pyx_v_sv == (float)-1) && PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
+    __pyx_v_du = __pyx_PyFloat_AsFloat(values[11]); if (unlikely((__pyx_v_du == (float)-1) && PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
+    __pyx_v_dv = __pyx_PyFloat_AsFloat(values[12]); if (unlikely((__pyx_v_dv == (float)-1) && PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
+    __pyx_v_s2d = __pyx_PyFloat_AsFloat(values[13]); if (unlikely((__pyx_v_s2d == (float)-1) && PyErr_Occurred())) __PYX_ERR(1, 26, __pyx_L3_error)
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("projectConeBeamGPU", 1, 15, 15, __pyx_nargs); __PYX_ERR(1, 28, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("reconstructConeBeamGPU", 1, 14, 14, __pyx_nargs); __PYX_ERR(1, 26, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -4942,14 +4907,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __Pyx_Arg_XDECREF_FASTCALL(values[__pyx_temp]);
     }
   }
-  __Pyx_AddTraceback("projectGPU.projectConeBeamGPU", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("reconstructGPU.reconstructConeBeamGPU", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_detector_array), __pyx_ptype_5numpy_ndarray, 1, "detector_array", 0))) __PYX_ERR(1, 28, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_transformation), __pyx_ptype_5numpy_ndarray, 1, "transformation", 0))) __PYX_ERR(1, 28, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_object_array), __pyx_ptype_5numpy_ndarray, 1, "object_array", 0))) __PYX_ERR(1, 28, __pyx_L1_error)
-  __pyx_r = __pyx_pf_10projectGPU_2projectConeBeamGPU(__pyx_self, __pyx_v_detector_array, __pyx_v_transformation, __pyx_v_object_array, __pyx_v_nx, __pyx_v_ny, __pyx_v_nz, __pyx_v_nu, __pyx_v_nv, __pyx_v_nw, __pyx_v_na, __pyx_v_su, __pyx_v_sv, __pyx_v_s2d, __pyx_v_near, __pyx_v_far);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_reconstruction_array), __pyx_ptype_5numpy_ndarray, 1, "reconstruction_array", 0))) __PYX_ERR(1, 26, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_transformation), __pyx_ptype_5numpy_ndarray, 1, "transformation", 0))) __PYX_ERR(1, 26, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_sinogram_array), __pyx_ptype_5numpy_ndarray, 1, "sinogram_array", 0))) __PYX_ERR(1, 26, __pyx_L1_error)
+  __pyx_r = __pyx_pf_14reconstructGPU_2reconstructConeBeamGPU(__pyx_self, __pyx_v_reconstruction_array, __pyx_v_transformation, __pyx_v_sinogram_array, __pyx_v_nx, __pyx_v_ny, __pyx_v_nz, __pyx_v_nu, __pyx_v_nv, __pyx_v_na, __pyx_v_su, __pyx_v_sv, __pyx_v_du, __pyx_v_dv, __pyx_v_s2d);
 
   /* function exit code */
   goto __pyx_L0;
@@ -4966,16 +4931,16 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10projectGPU_2projectConeBeamGPU(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_detector_array, PyArrayObject *__pyx_v_transformation, PyArrayObject *__pyx_v_object_array, int __pyx_v_nx, int __pyx_v_ny, int __pyx_v_nz, int __pyx_v_nu, int __pyx_v_nv, int __pyx_v_nw, int __pyx_v_na, float __pyx_v_su, float __pyx_v_sv, float __pyx_v_s2d, float __pyx_v_near, float __pyx_v_far) {
-  float *__pyx_v_c_detector_array;
+static PyObject *__pyx_pf_14reconstructGPU_2reconstructConeBeamGPU(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_reconstruction_array, PyArrayObject *__pyx_v_transformation, PyArrayObject *__pyx_v_sinogram_array, int __pyx_v_nx, int __pyx_v_ny, int __pyx_v_nz, int __pyx_v_nu, int __pyx_v_nv, int __pyx_v_na, float __pyx_v_su, float __pyx_v_sv, float __pyx_v_du, float __pyx_v_dv, float __pyx_v_s2d) {
+  float *__pyx_v_c_reconstruction_array;
   float *__pyx_v_c_transformation;
-  float *__pyx_v_c_object_array;
+  float *__pyx_v_c_sinogram_array;
   npy_intp __pyx_v_shape[1];
   PyObject *__pyx_v_new = NULL;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_detector_array;
-  __Pyx_Buffer __pyx_pybuffer_detector_array;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_object_array;
-  __Pyx_Buffer __pyx_pybuffer_object_array;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_reconstruction_array;
+  __Pyx_Buffer __pyx_pybuffer_reconstruction_array;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_sinogram_array;
+  __Pyx_Buffer __pyx_pybuffer_sinogram_array;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_transformation;
   __Pyx_Buffer __pyx_pybuffer_transformation;
   PyObject *__pyx_r = NULL;
@@ -4985,97 +4950,97 @@ static PyObject *__pyx_pf_10projectGPU_2projectConeBeamGPU(CYTHON_UNUSED PyObjec
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("projectConeBeamGPU", 1);
-  __pyx_pybuffer_detector_array.pybuffer.buf = NULL;
-  __pyx_pybuffer_detector_array.refcount = 0;
-  __pyx_pybuffernd_detector_array.data = NULL;
-  __pyx_pybuffernd_detector_array.rcbuffer = &__pyx_pybuffer_detector_array;
+  __Pyx_RefNannySetupContext("reconstructConeBeamGPU", 1);
+  __pyx_pybuffer_reconstruction_array.pybuffer.buf = NULL;
+  __pyx_pybuffer_reconstruction_array.refcount = 0;
+  __pyx_pybuffernd_reconstruction_array.data = NULL;
+  __pyx_pybuffernd_reconstruction_array.rcbuffer = &__pyx_pybuffer_reconstruction_array;
   __pyx_pybuffer_transformation.pybuffer.buf = NULL;
   __pyx_pybuffer_transformation.refcount = 0;
   __pyx_pybuffernd_transformation.data = NULL;
   __pyx_pybuffernd_transformation.rcbuffer = &__pyx_pybuffer_transformation;
-  __pyx_pybuffer_object_array.pybuffer.buf = NULL;
-  __pyx_pybuffer_object_array.refcount = 0;
-  __pyx_pybuffernd_object_array.data = NULL;
-  __pyx_pybuffernd_object_array.rcbuffer = &__pyx_pybuffer_object_array;
+  __pyx_pybuffer_sinogram_array.pybuffer.buf = NULL;
+  __pyx_pybuffer_sinogram_array.refcount = 0;
+  __pyx_pybuffernd_sinogram_array.data = NULL;
+  __pyx_pybuffernd_sinogram_array.rcbuffer = &__pyx_pybuffer_sinogram_array;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_detector_array.rcbuffer->pybuffer, (PyObject*)__pyx_v_detector_array, &__Pyx_TypeInfo_nn___pyx_t_10projectGPU_DTYPE, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 28, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_reconstruction_array.rcbuffer->pybuffer, (PyObject*)__pyx_v_reconstruction_array, &__Pyx_TypeInfo_nn___pyx_t_14reconstructGPU_DTYPE, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 26, __pyx_L1_error)
   }
-  __pyx_pybuffernd_detector_array.diminfo[0].strides = __pyx_pybuffernd_detector_array.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_detector_array.diminfo[0].shape = __pyx_pybuffernd_detector_array.rcbuffer->pybuffer.shape[0];
+  __pyx_pybuffernd_reconstruction_array.diminfo[0].strides = __pyx_pybuffernd_reconstruction_array.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_reconstruction_array.diminfo[0].shape = __pyx_pybuffernd_reconstruction_array.rcbuffer->pybuffer.shape[0];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_transformation.rcbuffer->pybuffer, (PyObject*)__pyx_v_transformation, &__Pyx_TypeInfo_nn___pyx_t_10projectGPU_DTYPE, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 28, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_transformation.rcbuffer->pybuffer, (PyObject*)__pyx_v_transformation, &__Pyx_TypeInfo_nn___pyx_t_14reconstructGPU_DTYPE, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 26, __pyx_L1_error)
   }
   __pyx_pybuffernd_transformation.diminfo[0].strides = __pyx_pybuffernd_transformation.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_transformation.diminfo[0].shape = __pyx_pybuffernd_transformation.rcbuffer->pybuffer.shape[0];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_object_array.rcbuffer->pybuffer, (PyObject*)__pyx_v_object_array, &__Pyx_TypeInfo_nn___pyx_t_10projectGPU_DTYPE, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 28, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_sinogram_array.rcbuffer->pybuffer, (PyObject*)__pyx_v_sinogram_array, &__Pyx_TypeInfo_nn___pyx_t_14reconstructGPU_DTYPE, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(1, 26, __pyx_L1_error)
   }
-  __pyx_pybuffernd_object_array.diminfo[0].strides = __pyx_pybuffernd_object_array.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_object_array.diminfo[0].shape = __pyx_pybuffernd_object_array.rcbuffer->pybuffer.shape[0];
+  __pyx_pybuffernd_sinogram_array.diminfo[0].strides = __pyx_pybuffernd_sinogram_array.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_sinogram_array.diminfo[0].shape = __pyx_pybuffernd_sinogram_array.rcbuffer->pybuffer.shape[0];
 
-  /* "projectGPU.pyx":30
- * def projectConeBeamGPU(cnp.ndarray[DTYPE, ndim=1] detector_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na, float su, float sv, float s2d, float near, float far):
+  /* "reconstructGPU.pyx":28
+ * def reconstructConeBeamGPU(cnp.ndarray[DTYPE, ndim=1] reconstruction_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] sinogram_array, int nx, int ny, int nz, int nu, int nv, int na, float su, float sv, float du, float dv, float s2d):
  * 
- *     cdef float *c_detector_array = <float *> detector_array.data             # <<<<<<<<<<<<<<
+ *     cdef float *c_reconstruction_array = <float *> reconstruction_array.data             # <<<<<<<<<<<<<<
  *     cdef float *c_transformation = <float *> transformation.data
- *     cdef float *c_object_array = <float *> object_array.data
+ *     cdef float *c_sinogram_array = <float *> sinogram_array.data
  */
-  __pyx_t_1 = __pyx_f_5numpy_7ndarray_4data_data(((PyArrayObject *)__pyx_v_detector_array)); if (unlikely(__pyx_t_1 == ((char *)NULL) && PyErr_Occurred())) __PYX_ERR(1, 30, __pyx_L1_error)
-  __pyx_v_c_detector_array = ((float *)__pyx_t_1);
+  __pyx_t_1 = __pyx_f_5numpy_7ndarray_4data_data(((PyArrayObject *)__pyx_v_reconstruction_array)); if (unlikely(__pyx_t_1 == ((char *)NULL) && PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L1_error)
+  __pyx_v_c_reconstruction_array = ((float *)__pyx_t_1);
 
-  /* "projectGPU.pyx":31
+  /* "reconstructGPU.pyx":29
  * 
- *     cdef float *c_detector_array = <float *> detector_array.data
+ *     cdef float *c_reconstruction_array = <float *> reconstruction_array.data
  *     cdef float *c_transformation = <float *> transformation.data             # <<<<<<<<<<<<<<
- *     cdef float *c_object_array = <float *> object_array.data
+ *     cdef float *c_sinogram_array = <float *> sinogram_array.data
  * 
  */
-  __pyx_t_1 = __pyx_f_5numpy_7ndarray_4data_data(((PyArrayObject *)__pyx_v_transformation)); if (unlikely(__pyx_t_1 == ((char *)NULL) && PyErr_Occurred())) __PYX_ERR(1, 31, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5numpy_7ndarray_4data_data(((PyArrayObject *)__pyx_v_transformation)); if (unlikely(__pyx_t_1 == ((char *)NULL) && PyErr_Occurred())) __PYX_ERR(1, 29, __pyx_L1_error)
   __pyx_v_c_transformation = ((float *)__pyx_t_1);
 
-  /* "projectGPU.pyx":32
- *     cdef float *c_detector_array = <float *> detector_array.data
+  /* "reconstructGPU.pyx":30
+ *     cdef float *c_reconstruction_array = <float *> reconstruction_array.data
  *     cdef float *c_transformation = <float *> transformation.data
- *     cdef float *c_object_array = <float *> object_array.data             # <<<<<<<<<<<<<<
+ *     cdef float *c_sinogram_array = <float *> sinogram_array.data             # <<<<<<<<<<<<<<
  * 
- *     funcConeBeam(c_detector_array, c_transformation, c_object_array, nx, ny, nz, nu, nv, nw, na, su, sv, s2d, near, far)
+ *     funcConeBeam(c_reconstruction_array, c_transformation, c_sinogram_array, nx, ny, nz, nu, nv, na, su, sv, du, dv, s2d)
  */
-  __pyx_t_1 = __pyx_f_5numpy_7ndarray_4data_data(((PyArrayObject *)__pyx_v_object_array)); if (unlikely(__pyx_t_1 == ((char *)NULL) && PyErr_Occurred())) __PYX_ERR(1, 32, __pyx_L1_error)
-  __pyx_v_c_object_array = ((float *)__pyx_t_1);
+  __pyx_t_1 = __pyx_f_5numpy_7ndarray_4data_data(((PyArrayObject *)__pyx_v_sinogram_array)); if (unlikely(__pyx_t_1 == ((char *)NULL) && PyErr_Occurred())) __PYX_ERR(1, 30, __pyx_L1_error)
+  __pyx_v_c_sinogram_array = ((float *)__pyx_t_1);
 
-  /* "projectGPU.pyx":34
- *     cdef float *c_object_array = <float *> object_array.data
+  /* "reconstructGPU.pyx":32
+ *     cdef float *c_sinogram_array = <float *> sinogram_array.data
  * 
- *     funcConeBeam(c_detector_array, c_transformation, c_object_array, nx, ny, nz, nu, nv, nw, na, su, sv, s2d, near, far)             # <<<<<<<<<<<<<<
+ *     funcConeBeam(c_reconstruction_array, c_transformation, c_sinogram_array, nx, ny, nz, nu, nv, na, su, sv, du, dv, s2d)             # <<<<<<<<<<<<<<
  * 
  *     cdef cnp.npy_intp shape[1]
  */
-  funcConeBeam(__pyx_v_c_detector_array, __pyx_v_c_transformation, __pyx_v_c_object_array, __pyx_v_nx, __pyx_v_ny, __pyx_v_nz, __pyx_v_nu, __pyx_v_nv, __pyx_v_nw, __pyx_v_na, __pyx_v_su, __pyx_v_sv, __pyx_v_s2d, __pyx_v_near, __pyx_v_far);
+  funcConeBeam(__pyx_v_c_reconstruction_array, __pyx_v_c_transformation, __pyx_v_c_sinogram_array, __pyx_v_nx, __pyx_v_ny, __pyx_v_nz, __pyx_v_nu, __pyx_v_nv, __pyx_v_na, __pyx_v_su, __pyx_v_sv, __pyx_v_du, __pyx_v_dv, __pyx_v_s2d);
 
-  /* "projectGPU.pyx":37
+  /* "reconstructGPU.pyx":35
  * 
  *     cdef cnp.npy_intp shape[1]
- *     shape[0] = <cnp.npy_intp> (na*nv*nu)             # <<<<<<<<<<<<<<
+ *     shape[0] = <cnp.npy_intp> (nx*ny*nz)             # <<<<<<<<<<<<<<
  * 
- *     new = cnp.PyArray_SimpleNewFromData(1, shape, cnp.NPY_FLOAT32, c_detector_array)
+ *     new = cnp.PyArray_SimpleNewFromData(1, shape, cnp.NPY_FLOAT32, c_reconstruction_array)
  */
-  (__pyx_v_shape[0]) = ((npy_intp)((__pyx_v_na * __pyx_v_nv) * __pyx_v_nu));
+  (__pyx_v_shape[0]) = ((npy_intp)((__pyx_v_nx * __pyx_v_ny) * __pyx_v_nz));
 
-  /* "projectGPU.pyx":39
- *     shape[0] = <cnp.npy_intp> (na*nv*nu)
+  /* "reconstructGPU.pyx":37
+ *     shape[0] = <cnp.npy_intp> (nx*ny*nz)
  * 
- *     new = cnp.PyArray_SimpleNewFromData(1, shape, cnp.NPY_FLOAT32, c_detector_array)             # <<<<<<<<<<<<<<
+ *     new = cnp.PyArray_SimpleNewFromData(1, shape, cnp.NPY_FLOAT32, c_reconstruction_array)             # <<<<<<<<<<<<<<
  * 
  *     return new
  */
-  __pyx_t_2 = PyArray_SimpleNewFromData(1, __pyx_v_shape, NPY_FLOAT32, __pyx_v_c_detector_array); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 39, __pyx_L1_error)
+  __pyx_t_2 = PyArray_SimpleNewFromData(1, __pyx_v_shape, NPY_FLOAT32, __pyx_v_c_reconstruction_array); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 37, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_v_new = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "projectGPU.pyx":41
- *     new = cnp.PyArray_SimpleNewFromData(1, shape, cnp.NPY_FLOAT32, c_detector_array)
+  /* "reconstructGPU.pyx":39
+ *     new = cnp.PyArray_SimpleNewFromData(1, shape, cnp.NPY_FLOAT32, c_reconstruction_array)
  * 
  *     return new             # <<<<<<<<<<<<<<
  */
@@ -5084,12 +5049,12 @@ static PyObject *__pyx_pf_10projectGPU_2projectConeBeamGPU(CYTHON_UNUSED PyObjec
   __pyx_r = __pyx_v_new;
   goto __pyx_L0;
 
-  /* "projectGPU.pyx":28
+  /* "reconstructGPU.pyx":26
+ *     return new
  * 
+ * def reconstructConeBeamGPU(cnp.ndarray[DTYPE, ndim=1] reconstruction_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] sinogram_array, int nx, int ny, int nz, int nu, int nv, int na, float su, float sv, float du, float dv, float s2d):             # <<<<<<<<<<<<<<
  * 
- * def projectConeBeamGPU(cnp.ndarray[DTYPE, ndim=1] detector_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na, float su, float sv, float s2d, float near, float far):             # <<<<<<<<<<<<<<
- * 
- *     cdef float *c_detector_array = <float *> detector_array.data
+ *     cdef float *c_reconstruction_array = <float *> reconstruction_array.data
  */
 
   /* function exit code */
@@ -5099,16 +5064,16 @@ static PyObject *__pyx_pf_10projectGPU_2projectConeBeamGPU(CYTHON_UNUSED PyObjec
     __Pyx_PyThreadState_declare
     __Pyx_PyThreadState_assign
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_detector_array.rcbuffer->pybuffer);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_object_array.rcbuffer->pybuffer);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_reconstruction_array.rcbuffer->pybuffer);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_sinogram_array.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_transformation.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("projectGPU.projectConeBeamGPU", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("reconstructGPU.reconstructConeBeamGPU", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_detector_array.rcbuffer->pybuffer);
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_object_array.rcbuffer->pybuffer);
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_reconstruction_array.rcbuffer->pybuffer);
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_sinogram_array.rcbuffer->pybuffer);
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_transformation.rcbuffer->pybuffer);
   __pyx_L2:;
   __Pyx_XDECREF(__pyx_v_new);
@@ -5137,19 +5102,18 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
     {&__pyx_n_s__3, __pyx_k__3, sizeof(__pyx_k__3), 0, 0, 1, 1},
     {&__pyx_n_s__8, __pyx_k__8, sizeof(__pyx_k__8), 0, 0, 1, 1},
     {&__pyx_n_s_asyncio_coroutines, __pyx_k_asyncio_coroutines, sizeof(__pyx_k_asyncio_coroutines), 0, 0, 1, 1},
-    {&__pyx_n_s_c_detector_array, __pyx_k_c_detector_array, sizeof(__pyx_k_c_detector_array), 0, 0, 1, 1},
-    {&__pyx_n_s_c_object_array, __pyx_k_c_object_array, sizeof(__pyx_k_c_object_array), 0, 0, 1, 1},
+    {&__pyx_n_s_c_reconstruction_array, __pyx_k_c_reconstruction_array, sizeof(__pyx_k_c_reconstruction_array), 0, 0, 1, 1},
+    {&__pyx_n_s_c_sinogram_array, __pyx_k_c_sinogram_array, sizeof(__pyx_k_c_sinogram_array), 0, 0, 1, 1},
     {&__pyx_n_s_c_transformation, __pyx_k_c_transformation, sizeof(__pyx_k_c_transformation), 0, 0, 1, 1},
     {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
-    {&__pyx_n_s_detector_array, __pyx_k_detector_array, sizeof(__pyx_k_detector_array), 0, 0, 1, 1},
-    {&__pyx_n_s_far, __pyx_k_far, sizeof(__pyx_k_far), 0, 0, 1, 1},
+    {&__pyx_n_s_du, __pyx_k_du, sizeof(__pyx_k_du), 0, 0, 1, 1},
+    {&__pyx_n_s_dv, __pyx_k_dv, sizeof(__pyx_k_dv), 0, 0, 1, 1},
     {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
     {&__pyx_n_s_initializing, __pyx_k_initializing, sizeof(__pyx_k_initializing), 0, 0, 1, 1},
     {&__pyx_n_s_is_coroutine, __pyx_k_is_coroutine, sizeof(__pyx_k_is_coroutine), 0, 0, 1, 1},
     {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
     {&__pyx_n_s_na, __pyx_k_na, sizeof(__pyx_k_na), 0, 0, 1, 1},
     {&__pyx_n_s_name, __pyx_k_name, sizeof(__pyx_k_name), 0, 0, 1, 1},
-    {&__pyx_n_s_near, __pyx_k_near, sizeof(__pyx_k_near), 0, 0, 1, 1},
     {&__pyx_n_s_new, __pyx_k_new, sizeof(__pyx_k_new), 0, 0, 1, 1},
     {&__pyx_n_s_np, __pyx_k_np, sizeof(__pyx_k_np), 0, 0, 1, 1},
     {&__pyx_n_s_nu, __pyx_k_nu, sizeof(__pyx_k_nu), 0, 0, 1, 1},
@@ -5157,17 +5121,17 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
     {&__pyx_kp_s_numpy_core_multiarray_failed_to, __pyx_k_numpy_core_multiarray_failed_to, sizeof(__pyx_k_numpy_core_multiarray_failed_to), 0, 0, 1, 0},
     {&__pyx_kp_s_numpy_core_umath_failed_to_impor, __pyx_k_numpy_core_umath_failed_to_impor, sizeof(__pyx_k_numpy_core_umath_failed_to_impor), 0, 0, 1, 0},
     {&__pyx_n_s_nv, __pyx_k_nv, sizeof(__pyx_k_nv), 0, 0, 1, 1},
-    {&__pyx_n_s_nw, __pyx_k_nw, sizeof(__pyx_k_nw), 0, 0, 1, 1},
     {&__pyx_n_s_nx, __pyx_k_nx, sizeof(__pyx_k_nx), 0, 0, 1, 1},
     {&__pyx_n_s_ny, __pyx_k_ny, sizeof(__pyx_k_ny), 0, 0, 1, 1},
     {&__pyx_n_s_nz, __pyx_k_nz, sizeof(__pyx_k_nz), 0, 0, 1, 1},
-    {&__pyx_n_s_object_array, __pyx_k_object_array, sizeof(__pyx_k_object_array), 0, 0, 1, 1},
-    {&__pyx_n_s_projectConeBeamGPU, __pyx_k_projectConeBeamGPU, sizeof(__pyx_k_projectConeBeamGPU), 0, 0, 1, 1},
-    {&__pyx_n_s_projectGPU, __pyx_k_projectGPU, sizeof(__pyx_k_projectGPU), 0, 0, 1, 1},
-    {&__pyx_n_s_projectParallelBeamGPU, __pyx_k_projectParallelBeamGPU, sizeof(__pyx_k_projectParallelBeamGPU), 0, 0, 1, 1},
-    {&__pyx_kp_s_pyCT_forward_projectGPU_pyx, __pyx_k_pyCT_forward_projectGPU_pyx, sizeof(__pyx_k_pyCT_forward_projectGPU_pyx), 0, 0, 1, 0},
+    {&__pyx_kp_s_pyCT_backward_reconstructGPU_pyx, __pyx_k_pyCT_backward_reconstructGPU_pyx, sizeof(__pyx_k_pyCT_backward_reconstructGPU_pyx), 0, 0, 1, 0},
+    {&__pyx_n_s_reconstructConeBeamGPU, __pyx_k_reconstructConeBeamGPU, sizeof(__pyx_k_reconstructConeBeamGPU), 0, 0, 1, 1},
+    {&__pyx_n_s_reconstructGPU, __pyx_k_reconstructGPU, sizeof(__pyx_k_reconstructGPU), 0, 0, 1, 1},
+    {&__pyx_n_s_reconstructParallelBeamGPU, __pyx_k_reconstructParallelBeamGPU, sizeof(__pyx_k_reconstructParallelBeamGPU), 0, 0, 1, 1},
+    {&__pyx_n_s_reconstruction_array, __pyx_k_reconstruction_array, sizeof(__pyx_k_reconstruction_array), 0, 0, 1, 1},
     {&__pyx_n_s_s2d, __pyx_k_s2d, sizeof(__pyx_k_s2d), 0, 0, 1, 1},
     {&__pyx_n_s_shape, __pyx_k_shape, sizeof(__pyx_k_shape), 0, 0, 1, 1},
+    {&__pyx_n_s_sinogram_array, __pyx_k_sinogram_array, sizeof(__pyx_k_sinogram_array), 0, 0, 1, 1},
     {&__pyx_n_s_spec, __pyx_k_spec, sizeof(__pyx_k_spec), 0, 0, 1, 1},
     {&__pyx_n_s_su, __pyx_k_su, sizeof(__pyx_k_su), 0, 0, 1, 1},
     {&__pyx_n_s_sv, __pyx_k_sv, sizeof(__pyx_k_sv), 0, 0, 1, 1},
@@ -5212,29 +5176,29 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
 
-  /* "projectGPU.pyx":12
+  /* "reconstructGPU.pyx":11
+ *     void funcConeBeam(float *reconstruction_array, float *transformation, float *sinogram_array, int nx, int ny, int nz, int nu, int nv, int na, float su, float sv, float du, float dv, float s2d);
  * 
+ * def reconstructParallelBeamGPU(cnp.ndarray[DTYPE, ndim=1] reconstruction_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] sinogram_array, int nx, int ny, int nz, int nu, int nv, int na):             # <<<<<<<<<<<<<<
  * 
- * def projectParallelBeamGPU(cnp.ndarray[DTYPE, ndim=1] detector_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na):             # <<<<<<<<<<<<<<
- * 
- *     cdef float *c_detector_array = <float *> detector_array.data
+ *     cdef float *c_reconstruction_array = <float *> reconstruction_array.data
  */
-  __pyx_tuple__4 = PyTuple_Pack(15, __pyx_n_s_detector_array, __pyx_n_s_transformation, __pyx_n_s_object_array, __pyx_n_s_nx, __pyx_n_s_ny, __pyx_n_s_nz, __pyx_n_s_nu, __pyx_n_s_nv, __pyx_n_s_nw, __pyx_n_s_na, __pyx_n_s_c_detector_array, __pyx_n_s_c_transformation, __pyx_n_s_c_object_array, __pyx_n_s_shape, __pyx_n_s_new); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_tuple__4 = PyTuple_Pack(14, __pyx_n_s_reconstruction_array, __pyx_n_s_transformation, __pyx_n_s_sinogram_array, __pyx_n_s_nx, __pyx_n_s_ny, __pyx_n_s_nz, __pyx_n_s_nu, __pyx_n_s_nv, __pyx_n_s_na, __pyx_n_s_c_reconstruction_array, __pyx_n_s_c_transformation, __pyx_n_s_c_sinogram_array, __pyx_n_s_shape, __pyx_n_s_new); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(1, 11, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__4);
   __Pyx_GIVEREF(__pyx_tuple__4);
-  __pyx_codeobj__5 = (PyObject*)__Pyx_PyCode_New(10, 0, 0, 15, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__4, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_pyCT_forward_projectGPU_pyx, __pyx_n_s_projectParallelBeamGPU, 12, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__5)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_codeobj__5 = (PyObject*)__Pyx_PyCode_New(9, 0, 0, 14, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__4, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_pyCT_backward_reconstructGPU_pyx, __pyx_n_s_reconstructParallelBeamGPU, 11, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__5)) __PYX_ERR(1, 11, __pyx_L1_error)
 
-  /* "projectGPU.pyx":28
+  /* "reconstructGPU.pyx":26
+ *     return new
  * 
+ * def reconstructConeBeamGPU(cnp.ndarray[DTYPE, ndim=1] reconstruction_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] sinogram_array, int nx, int ny, int nz, int nu, int nv, int na, float su, float sv, float du, float dv, float s2d):             # <<<<<<<<<<<<<<
  * 
- * def projectConeBeamGPU(cnp.ndarray[DTYPE, ndim=1] detector_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na, float su, float sv, float s2d, float near, float far):             # <<<<<<<<<<<<<<
- * 
- *     cdef float *c_detector_array = <float *> detector_array.data
+ *     cdef float *c_reconstruction_array = <float *> reconstruction_array.data
  */
-  __pyx_tuple__6 = PyTuple_Pack(20, __pyx_n_s_detector_array, __pyx_n_s_transformation, __pyx_n_s_object_array, __pyx_n_s_nx, __pyx_n_s_ny, __pyx_n_s_nz, __pyx_n_s_nu, __pyx_n_s_nv, __pyx_n_s_nw, __pyx_n_s_na, __pyx_n_s_su, __pyx_n_s_sv, __pyx_n_s_s2d, __pyx_n_s_near, __pyx_n_s_far, __pyx_n_s_c_detector_array, __pyx_n_s_c_transformation, __pyx_n_s_c_object_array, __pyx_n_s_shape, __pyx_n_s_new); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(1, 28, __pyx_L1_error)
+  __pyx_tuple__6 = PyTuple_Pack(19, __pyx_n_s_reconstruction_array, __pyx_n_s_transformation, __pyx_n_s_sinogram_array, __pyx_n_s_nx, __pyx_n_s_ny, __pyx_n_s_nz, __pyx_n_s_nu, __pyx_n_s_nv, __pyx_n_s_na, __pyx_n_s_su, __pyx_n_s_sv, __pyx_n_s_du, __pyx_n_s_dv, __pyx_n_s_s2d, __pyx_n_s_c_reconstruction_array, __pyx_n_s_c_transformation, __pyx_n_s_c_sinogram_array, __pyx_n_s_shape, __pyx_n_s_new); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(1, 26, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__6);
   __Pyx_GIVEREF(__pyx_tuple__6);
-  __pyx_codeobj__7 = (PyObject*)__Pyx_PyCode_New(15, 0, 0, 20, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__6, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_pyCT_forward_projectGPU_pyx, __pyx_n_s_projectConeBeamGPU, 28, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__7)) __PYX_ERR(1, 28, __pyx_L1_error)
+  __pyx_codeobj__7 = (PyObject*)__Pyx_PyCode_New(14, 0, 0, 19, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__6, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_pyCT_backward_reconstructGPU_pyx, __pyx_n_s_reconstructConeBeamGPU, 26, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__7)) __PYX_ERR(1, 26, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -5362,10 +5326,10 @@ static int __Pyx_modinit_function_import_code(void) {
 #if PY_MAJOR_VERSION >= 3
 #if CYTHON_PEP489_MULTI_PHASE_INIT
 static PyObject* __pyx_pymod_create(PyObject *spec, PyModuleDef *def); /*proto*/
-static int __pyx_pymod_exec_projectGPU(PyObject* module); /*proto*/
+static int __pyx_pymod_exec_reconstructGPU(PyObject* module); /*proto*/
 static PyModuleDef_Slot __pyx_moduledef_slots[] = {
   {Py_mod_create, (void*)__pyx_pymod_create},
-  {Py_mod_exec, (void*)__pyx_pymod_exec_projectGPU},
+  {Py_mod_exec, (void*)__pyx_pymod_exec_reconstructGPU},
   {0, NULL}
 };
 #endif
@@ -5378,7 +5342,7 @@ namespace {
   #endif
   {
       PyModuleDef_HEAD_INIT,
-      "projectGPU",
+      "reconstructGPU",
       0, /* m_doc */
     #if CYTHON_PEP489_MULTI_PHASE_INIT
       0, /* m_size */
@@ -5426,11 +5390,11 @@ namespace {
 
 
 #if PY_MAJOR_VERSION < 3
-__Pyx_PyMODINIT_FUNC initprojectGPU(void) CYTHON_SMALL_CODE; /*proto*/
-__Pyx_PyMODINIT_FUNC initprojectGPU(void)
+__Pyx_PyMODINIT_FUNC initreconstructGPU(void) CYTHON_SMALL_CODE; /*proto*/
+__Pyx_PyMODINIT_FUNC initreconstructGPU(void)
 #else
-__Pyx_PyMODINIT_FUNC PyInit_projectGPU(void) CYTHON_SMALL_CODE; /*proto*/
-__Pyx_PyMODINIT_FUNC PyInit_projectGPU(void)
+__Pyx_PyMODINIT_FUNC PyInit_reconstructGPU(void) CYTHON_SMALL_CODE; /*proto*/
+__Pyx_PyMODINIT_FUNC PyInit_reconstructGPU(void)
 #if CYTHON_PEP489_MULTI_PHASE_INIT
 {
   return PyModuleDef_Init(&__pyx_moduledef);
@@ -5511,7 +5475,7 @@ bad:
 }
 
 
-static CYTHON_SMALL_CODE int __pyx_pymod_exec_projectGPU(PyObject *__pyx_pyinit_module)
+static CYTHON_SMALL_CODE int __pyx_pymod_exec_reconstructGPU(PyObject *__pyx_pyinit_module)
 #endif
 #endif
 {
@@ -5529,7 +5493,7 @@ static CYTHON_SMALL_CODE int __pyx_pymod_exec_projectGPU(PyObject *__pyx_pyinit_
   #if CYTHON_PEP489_MULTI_PHASE_INIT
   if (__pyx_m) {
     if (__pyx_m == __pyx_pyinit_module) return 0;
-    PyErr_SetString(PyExc_RuntimeError, "Module 'projectGPU' has already been imported. Re-initialisation is not supported.");
+    PyErr_SetString(PyExc_RuntimeError, "Module 'reconstructGPU' has already been imported. Re-initialisation is not supported.");
     return -1;
   }
   #elif PY_MAJOR_VERSION >= 3
@@ -5541,13 +5505,13 @@ static CYTHON_SMALL_CODE int __pyx_pymod_exec_projectGPU(PyObject *__pyx_pyinit_
   Py_INCREF(__pyx_m);
   #else
   #if PY_MAJOR_VERSION < 3
-  __pyx_m = Py_InitModule4("projectGPU", __pyx_methods, 0, 0, PYTHON_API_VERSION); Py_XINCREF(__pyx_m);
+  __pyx_m = Py_InitModule4("reconstructGPU", __pyx_methods, 0, 0, PYTHON_API_VERSION); Py_XINCREF(__pyx_m);
   if (unlikely(!__pyx_m)) __PYX_ERR(1, 1, __pyx_L1_error)
   #elif CYTHON_USE_MODULE_STATE
   __pyx_t_1 = PyModule_Create(&__pyx_moduledef); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 1, __pyx_L1_error)
   {
     int add_module_result = PyState_AddModule(__pyx_t_1, &__pyx_moduledef);
-    __pyx_t_1 = 0; /* transfer ownership from __pyx_t_1 to "projectGPU" pseudovariable */
+    __pyx_t_1 = 0; /* transfer ownership from __pyx_t_1 to "reconstructGPU" pseudovariable */
     if (unlikely((add_module_result < 0))) __PYX_ERR(1, 1, __pyx_L1_error)
     pystate_addmodule_run = 1;
   }
@@ -5571,7 +5535,7 @@ if (!__Pyx_RefNanny) {
       Py_FatalError("failed to import 'refnanny' module");
 }
 #endif
-  __Pyx_RefNannySetupContext("__Pyx_PyMODINIT_FUNC PyInit_projectGPU(void)", 0);
+  __Pyx_RefNannySetupContext("__Pyx_PyMODINIT_FUNC PyInit_reconstructGPU(void)", 0);
   if (__Pyx_check_binary_version(__PYX_LIMITED_VERSION_HEX, __Pyx_get_runtime_version(), CYTHON_COMPILING_IN_LIMITED_API) < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   #ifdef __Pxy_PyFrame_Initialize_Offsets
   __Pxy_PyFrame_Initialize_Offsets();
@@ -5609,14 +5573,14 @@ if (!__Pyx_RefNanny) {
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
   if (__Pyx_init_sys_getdefaultencoding_params() < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   #endif
-  if (__pyx_module_is_main_projectGPU) {
+  if (__pyx_module_is_main_reconstructGPU) {
     if (PyObject_SetAttr(__pyx_m, __pyx_n_s_name, __pyx_n_s_main) < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   }
   #if PY_MAJOR_VERSION >= 3
   {
     PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) __PYX_ERR(1, 1, __pyx_L1_error)
-    if (!PyDict_GetItemString(modules, "projectGPU")) {
-      if (unlikely((PyDict_SetItemString(modules, "projectGPU", __pyx_m) < 0))) __PYX_ERR(1, 1, __pyx_L1_error)
+    if (!PyDict_GetItemString(modules, "reconstructGPU")) {
+      if (unlikely((PyDict_SetItemString(modules, "reconstructGPU", __pyx_m) < 0))) __PYX_ERR(1, 1, __pyx_L1_error)
     }
   }
   #endif
@@ -5637,7 +5601,7 @@ if (!__Pyx_RefNanny) {
   if (__Pyx_patch_abc() < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   #endif
 
-  /* "projectGPU.pyx":1
+  /* "reconstructGPU.pyx":1
  * import numpy as np             # <<<<<<<<<<<<<<
  * cimport numpy as cnp
  * cnp.import_array()
@@ -5647,7 +5611,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_2) < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "projectGPU.pyx":3
+  /* "reconstructGPU.pyx":3
  * import numpy as np
  * cimport numpy as cnp
  * cnp.import_array()             # <<<<<<<<<<<<<<
@@ -5656,31 +5620,31 @@ if (!__Pyx_RefNanny) {
  */
   __pyx_t_3 = __pyx_f_5numpy_import_array(); if (unlikely(__pyx_t_3 == ((int)-1))) __PYX_ERR(1, 3, __pyx_L1_error)
 
-  /* "projectGPU.pyx":12
+  /* "reconstructGPU.pyx":11
+ *     void funcConeBeam(float *reconstruction_array, float *transformation, float *sinogram_array, int nx, int ny, int nz, int nu, int nv, int na, float su, float sv, float du, float dv, float s2d);
  * 
+ * def reconstructParallelBeamGPU(cnp.ndarray[DTYPE, ndim=1] reconstruction_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] sinogram_array, int nx, int ny, int nz, int nu, int nv, int na):             # <<<<<<<<<<<<<<
  * 
- * def projectParallelBeamGPU(cnp.ndarray[DTYPE, ndim=1] detector_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na):             # <<<<<<<<<<<<<<
- * 
- *     cdef float *c_detector_array = <float *> detector_array.data
+ *     cdef float *c_reconstruction_array = <float *> reconstruction_array.data
  */
-  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_10projectGPU_1projectParallelBeamGPU, 0, __pyx_n_s_projectParallelBeamGPU, NULL, __pyx_n_s_projectGPU, __pyx_d, ((PyObject *)__pyx_codeobj__5)); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_14reconstructGPU_1reconstructParallelBeamGPU, 0, __pyx_n_s_reconstructParallelBeamGPU, NULL, __pyx_n_s_reconstructGPU, __pyx_d, ((PyObject *)__pyx_codeobj__5)); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 11, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_projectParallelBeamGPU, __pyx_t_2) < 0) __PYX_ERR(1, 12, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_reconstructParallelBeamGPU, __pyx_t_2) < 0) __PYX_ERR(1, 11, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "projectGPU.pyx":28
+  /* "reconstructGPU.pyx":26
+ *     return new
  * 
+ * def reconstructConeBeamGPU(cnp.ndarray[DTYPE, ndim=1] reconstruction_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] sinogram_array, int nx, int ny, int nz, int nu, int nv, int na, float su, float sv, float du, float dv, float s2d):             # <<<<<<<<<<<<<<
  * 
- * def projectConeBeamGPU(cnp.ndarray[DTYPE, ndim=1] detector_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na, float su, float sv, float s2d, float near, float far):             # <<<<<<<<<<<<<<
- * 
- *     cdef float *c_detector_array = <float *> detector_array.data
+ *     cdef float *c_reconstruction_array = <float *> reconstruction_array.data
  */
-  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_10projectGPU_3projectConeBeamGPU, 0, __pyx_n_s_projectConeBeamGPU, NULL, __pyx_n_s_projectGPU, __pyx_d, ((PyObject *)__pyx_codeobj__7)); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 28, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_14reconstructGPU_3reconstructConeBeamGPU, 0, __pyx_n_s_reconstructConeBeamGPU, NULL, __pyx_n_s_reconstructGPU, __pyx_d, ((PyObject *)__pyx_codeobj__7)); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 26, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_projectConeBeamGPU, __pyx_t_2) < 0) __PYX_ERR(1, 28, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_reconstructConeBeamGPU, __pyx_t_2) < 0) __PYX_ERR(1, 26, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "projectGPU.pyx":1
+  /* "reconstructGPU.pyx":1
  * import numpy as np             # <<<<<<<<<<<<<<
  * cimport numpy as cnp
  * cnp.import_array()
@@ -5697,7 +5661,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_XDECREF(__pyx_t_2);
   if (__pyx_m) {
     if (__pyx_d && stringtab_initialized) {
-      __Pyx_AddTraceback("init projectGPU", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("init reconstructGPU", __pyx_clineno, __pyx_lineno, __pyx_filename);
     }
     #if !CYTHON_USE_MODULE_STATE
     Py_CLEAR(__pyx_m);
@@ -5711,7 +5675,7 @@ if (!__Pyx_RefNanny) {
     }
     #endif
   } else if (!PyErr_Occurred()) {
-    PyErr_SetString(PyExc_ImportError, "init projectGPU");
+    PyErr_SetString(PyExc_ImportError, "init reconstructGPU");
   }
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();

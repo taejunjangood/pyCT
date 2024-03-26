@@ -328,12 +328,20 @@ ext1 = Extension('projectGPU',
                  libraries=["cudart"],
                  include_dirs=[NUMPY_INCLUDE, CUDA["include"], "pyCT/cuda"]
                 )
+ext2 = Extension('reconstructGPU',
+                 sources=["pyCT/backward/reconstructGPU.pyx", "pyCT/cuda/backward.cu"],
+                 language="c++",
+                 runtime_library_dirs=[CUDA["lib64"]] if not IS_WINDOWS else None,
+                 library_dirs=[CUDA["lib64"]],
+                 libraries=["cudart"],
+                 include_dirs=[NUMPY_INCLUDE, CUDA["include"], "pyCT/cuda"]
+                )
 
 setup(
     name="pyCT", 
     py_modules=['pyCT.py'],
-    version="0.0.2",
-    ext_modules=[ext1],
+    version="0.1.0",
+    ext_modules=[ext1, ext2],
     cmdclass={"build_ext" : BuildExtension},
     packages=find_packages(),
     include_package_data=True,

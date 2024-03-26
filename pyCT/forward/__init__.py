@@ -46,14 +46,14 @@ def project(object_array : np.ndarray,
 
     # run
     if is_cuda:
-        detector_array = np.zeros(na*nu*nv, dtype=np.float32)
+        detector_array = np.zeros(na*nv*nu, dtype=np.float32)
         transformationMatrix = transformationMatrix.flatten().astype(np.float32)
         object_array = object_array.flatten().astype(np.float32)
         if mode:
             detector_array = deepcopy(projectConeBeamGPU(detector_array, transformationMatrix, object_array,  nx, ny, nz, nu, nv, nw, na, su, sv, s2d, near, far))
         else:
             detector_array = deepcopy(projectParallelBeamGPU(detector_array, transformationMatrix, object_array,  nx, ny, nz, nu, nv, nw, na))
-        detector_array = detector_array.reshape(na,nv,nu)
+        detector_array = detector_array.reshape(na, nv, nu)
     
     else:
         detector_array = np.zeros([na, nv, nu])
