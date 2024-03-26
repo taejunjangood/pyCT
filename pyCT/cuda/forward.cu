@@ -7,8 +7,6 @@ void kernel_parallel(float* proj, cudaTextureObject_t texObjImg, float* transfor
 	int nv = gridDim.y;
 	int iu = blockIdx.x;
 	int iv = blockIdx.y;
-
-	// int na = blockDim.x;
 	int ia = threadIdx.x;
 
 	float u = -1. + (float) (1 + iu * 2) / nu;

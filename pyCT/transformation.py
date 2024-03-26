@@ -5,7 +5,7 @@ def getTransformation(params, nw):
     return _Transformation(params, nw)
 
 class _Transformation():
-    def __init__(self, params : _Parameters, nw : int):
+    def __init__(self, params:_Parameters, nw:int):
         self.worldTransformation = None
         self.cameraTransformation = None
         self.viewTransformation = None
@@ -44,8 +44,8 @@ class _Transformation():
                                   [0,1,0,0],
                                   [0,0,0,1]])
         # [A,4,4]x[4,4] -> [A,4,4]
-        detectorFrame = np.einsum('aij,jk->aki', _getRotation(self.__params.detector.motion.rotation, 'zxz'), detectorFrame)
-        sourceOrigin = self.__params.distance.source2object * detectorFrame[:, 2, :3] + self.__params.detector.motion.translation # [A,3]
+        detectorFrame = np.einsum('aij,jk->aki', _getRotation(self.__params.source.motion.rotation, 'zxz'), detectorFrame)
+        sourceOrigin = self.__params.source.distance.source2object * detectorFrame[:, 2, :3] + self.__params.source.motion.translation # [A,3]
         self.cameraTransformation = np.einsum('aij,ajk->aik', detectorFrame, _getTranslation(-sourceOrigin))
 
 
@@ -55,8 +55,8 @@ class _Transformation():
         else:
             nu, nv = self.__params.detector.size.get()
             du, dv = self.__params.detector.spacing.get()
-            lengthNear = self.__params.distance.near
-            lengthFar = self.__params.distance.far
+            lengthNear = self.__params.source.distance.near
+            lengthFar = self.__params.source.distance.far
             length = (lengthFar - lengthNear)
             self.viewTransformation = np.array(
                 [
