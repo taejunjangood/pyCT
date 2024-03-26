@@ -36,12 +36,13 @@ void kernel_parallel(float* proj, cudaTextureObject_t texObjImg, float* transfor
 	float zz = t20 * u + t21 * v + t23;
 
 	float sum = 0;
+	float x, y, z;
 
 	for (int i = 0; i < nw; i++)
 	{
-		float x = xx + t02 * w;
-		float y = yy + t12 * w;
-		float z = zz + t22 * w;
+		x = xx + t02 * w;
+		y = yy + t12 * w;
+		z = zz + t22 * w;
 		sum += tex3D<float>(texObjImg, x+.5, y+.5, z+.5);
 		w += dw;
 	}
@@ -139,12 +140,13 @@ void kernel_cone(float* proj, cudaTextureObject_t texObjImg, float* transformati
 	float t23 = transformation[3 + 2*4 + ia*4*4];
 
 	float sum = 0;
+	float x, y, z;
 
 	for (int i = 0; i < nw; i++)
 	{
-		float x = t00*rx*t + t01*ry*t + t02*rz*t + t03;
-		float y = t10*rx*t + t11*ry*t + t12*rz*t + t13;
-		float z = t20*rx*t + t21*ry*t + t22*rz*t + t23;
+		x = t00*rx*t + t01*ry*t + t02*rz*t + t03;
+		y = t10*rx*t + t11*ry*t + t12*rz*t + t13;
+		z = t20*rx*t + t21*ry*t + t22*rz*t + t23;
 		sum += tex3D<float>(texObjImg, x+.5, y+.5, z+.5);
 		t += dt;
 	}

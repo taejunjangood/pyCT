@@ -2,12 +2,6 @@ import numpy as np
 cimport numpy as cnp
 cnp.import_array()
 
-# from libc.stdlib cimport malloc, free
-
-# cdef extern from "numpy/arrayobject.h":
-#     void PyArray_ENABLEFLAGS(cnp.ndarray arr, int flags)
-
-
 ctypedef cnp.float32_t DTYPE
 
 cdef extern from "forward.h":
@@ -27,7 +21,6 @@ def projectParallelBeamGPU(cnp.ndarray[DTYPE, ndim=1] detector_array, cnp.ndarra
     shape[0] = <cnp.npy_intp> (na*nv*nu)
 
     new = cnp.PyArray_SimpleNewFromData(1, shape, cnp.NPY_FLOAT32, c_detector_array)
-    #PyArray_ENABLEFLAGS(new, cnp.NPY_OWNDATA)
 
     return new
 
@@ -44,6 +37,5 @@ def projectConeBeamGPU(cnp.ndarray[DTYPE, ndim=1] detector_array, cnp.ndarray[DT
     shape[0] = <cnp.npy_intp> (na*nv*nu)
 
     new = cnp.PyArray_SimpleNewFromData(1, shape, cnp.NPY_FLOAT32, c_detector_array)
-    #PyArray_ENABLEFLAGS(new, cnp.NPY_OWNDATA)
 
     return new
