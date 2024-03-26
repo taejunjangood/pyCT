@@ -18,7 +18,7 @@ def show(params : _Parameters,
     params2.object.size.set(np.array(params.object.size.get())//scale)
     params2.object.spacing.set(np.array(params.object.spacing.get())*scale)
     params2.set()
-    tf = pyCT.forward.getTransformation(params2)
+    tf = pyCT.getTransformation(params2, 1)
     cube = rescale(obj, 1/scale, preserve_range=True, anti_aliasing=False)
 
     if obj is not None:
@@ -37,7 +37,7 @@ def show(params : _Parameters,
         su, sv = params.detector.length.get()
         nu, nv = params.detector.size.get()
         X,Y = np.meshgrid(np.linspace(.5,su-.5,nu)-su/2, np.linspace(.5,sv-.5,nv)-sv/2)
-        Z = np.ones_like(Y) * -params.distance.source2detector
+        Z = np.ones_like(Y) * -params.source.distance.source2detector
         X,Y,Z,_ = np.linalg.inv(tf.cameraTransformation[0]) @ np.array([X.flatten(), Y.flatten(), Z.flatten(), np.ones(X.size)])
         X = X.reshape(proj.shape)
         Y = Y.reshape(proj.shape)
@@ -68,7 +68,7 @@ def show(params : _Parameters,
     up = cam[0,:-1,1]
     back = cam[0,:-1,2]
     source = cam[0,:-1,3]
-    detector_center = source - back * params.distance.source2detector
+    detector_center = source - back * params.source.distance.source2detector
     detector_right = detector_center + right*params.detector.length.u/2
     detector_up = detector_center + up*params.detector.length.v/2
     detector_right_up = detector_center + right*params.detector.length.u/2 + up*params.detector.length.v/2

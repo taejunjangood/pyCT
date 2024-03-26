@@ -18,6 +18,7 @@ import pyCT.backward as backward
 from pyCT.parameter import getParameters
 from pyCT.phantom import getPhantom
 from pyCT.transformation import getTransformation
+from pyCT import geometry
 
 
 IS_WINDOWS = sys.platform == "win32"

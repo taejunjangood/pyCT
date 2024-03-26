@@ -10,7 +10,7 @@ class _Parameters():
         self.mode = None
         self.object = _Object()
         self.detector = _Detector()
-        self.distance = _Distance()
+        self.source = _Source()
 
         if path_header is not None:
             self.__setParameters(path_header)
@@ -27,8 +27,8 @@ class _Parameters():
         output +=     'detector size   (pixel) : ({}, {})\n'.format(self.detector.size.u, self.detector.size.v)
         output +=     'detector spacing   (mm) : ({}, {})\n'.format(self.detector.spacing.u, self.detector.spacing.v)
         output +=     'detector length    (mm) : ({}, {})\n'.format(self.detector.length.u, self.detector.length.v)
-        output +=     'source to object   (mm) : {}\n'.format(self.distance.source2object)
-        output +=     'source to detector (mm) : {}\n'.format(self.distance.source2detector)
+        output +=     'source to object   (mm) : {}\n'.format(self.source.distance.source2object)
+        output +=     'source to detector (mm) : {}\n'.format(self.source.distance.source2detector)
         return output
     
     def set(self):
@@ -40,21 +40,18 @@ class _Parameters():
             self.detector.length.set([size * spacing 
                                       for size, spacing in zip(self.detector.size.get(), 
                                                              self.detector.spacing.get())])
-        if (self.distance.source2object is not None) and (self.distance.source2detector is not None):
+        if self.source.distance.check():
             length = .5 * ((self.object.length.x**2 + self.object.length.y**2 + self.object.length.z**2) ** .5)
-            self.distance.near = max(0, self.distance.source2object - length)
-            self.distance.far = min(self.distance.source2detector, self.distance.source2object + length)
-    
+            self.source.distance.near = max(0, self.source.distance.source2object - length)
+            self.source.distance.far = min(self.source.distance.source2detector, self.source.distance.source2object + length)
+        
     def copy(self):
         return deepcopy(self)
-    
-    @staticmethod
-    def __loadConfig(path):
-        with open(path, 'r') as f:
-            return yaml.load(f, Loader=yaml.FullLoader)
         
     def __setParameters(self, config_path):
-        config = self.__loadConfig(config_path)
+        with open(config_path, 'r') as f:
+            config = yaml.load(f, Loader=yaml.FullLoader)
+
         if 'object_size_x' in config.keys() and 'object_spacing_x' in config.keys():
             self.object.length.x = config['object_size_x'] * config['object_spacing_x']
         if 'object_size_y' in config.keys() and 'object_spacing_y' in config.keys():
@@ -69,8 +66,8 @@ class _Parameters():
         
         if 'distance_source2object' in config.keys() and 'distance_source2detector' in config.keys():
             length = .5 * ((self.object.length.x**2 + self.object.length.y**2 + self.object.length.z**2) ** .5)
-            self.distance.near = max(0, config['distance_source2object'] - length)
-            self.distance.far = min(config['distance_source2detector'], config['distance_source2object'] + length)
+            self.source.distance.near = max(0, config['distance_source2object'] - length)
+            self.source.distance.far = min(config['distance_source2detector'], config['distance_source2object'] + length)
 
         for key, value in config.items():
             # set mode
@@ -127,9 +124,14 @@ class _Parameters():
 
             # set distance
             elif key == 'distance_source2object':
-                self.distance.source2object = value
+                self.source.distance.source2object = value
             elif key == 'distance_source2detector':
-                self.distance.source2detector = value
+                self.source.distance.source2detector = value
+
+
+
+
+
 
 class _2D():
     def __init__(self, u=None, v=None):
@@ -177,6 +179,18 @@ class _Motion():
         if offset is not None:
             self.translation = offset
 
+class _Distance():
+    def __init__(self):
+        self.source2object = None
+        self.source2detector = None
+        self.near = None
+        self.far = None
+    def check(self):
+        if (self.source2object == None) or (self.source2detector == None):
+            return False
+        else:
+            return True
+
 class _Object():
     def __init__(self):
         self.size = _3D()
@@ -189,16 +203,9 @@ class _Detector():
         self.size = _2D()
         self.length = _2D()
         self.spacing = _2D()
-        self.motion = _Motion()
+        self.offset = _2D()
         
-class _Distance():
+class _Source():
     def __init__(self):
-        self.source2object = None
-        self.source2detector = None
-        self.near = None
-        self.far = None
-    def check(self):
-        if (self.source2object == None) or (self.source2detector == None):
-            return False
-        else:
-            True
+        self.distance = _Distance()
+        self.motion = _Motion()
