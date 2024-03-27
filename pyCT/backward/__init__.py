@@ -42,7 +42,7 @@ def reconstruct(sinogram_array : np.ndarray,
     if filter is None or filter.lower() == 'none':
         pass
     else:
-        sinogram_array = applyFilter(sinogram_array, parameters, filter)
+        sinogram_array = _applyFilter(sinogram_array, parameters, filter)
 
     if is_cuda:
         reconstruction_array = np.zeros(nz*ny*nx, dtype=np.float32)
@@ -63,7 +63,7 @@ def reconstruct(sinogram_array : np.ndarray,
     return reconstruction_array
 
 
-def applyFilter(sinogram_array : np.ndarray, 
+def _applyFilter(sinogram_array : np.ndarray, 
                 parameters : _Parameters, 
                 filter : str):
     na = len(parameters.source.motion.rotation)
