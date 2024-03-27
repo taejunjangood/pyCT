@@ -98,4 +98,8 @@ def applyFilter(sinogram_array : np.ndarray,
         fourier_filter *= np.fft.fftshift(np.hanning(extended_size))
 
     sinogram_array = np.fft.ifft(fourier_proj*fourier_filter, axis=-1).real
-    return sinogram_array[..., pad : -pad] * (np.pi/na/2/du/s2o*s2d)
+    if parameters.mode:
+        weight = np.pi / na / 2 / du / s2o * s2d
+    else:
+        weight = np.pi / na / 2 / du
+    return sinogram_array[..., pad : -pad] * weight

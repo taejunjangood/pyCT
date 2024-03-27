@@ -5,29 +5,24 @@ void kernel_parallel(float* proj, cudaTextureObject_t texObjImg, float* transfor
 {
 	int nu = gridDim.x;
 	int nv = gridDim.y;
-	int iu = blockIdx.x;
-	int iv = blockIdx.y;
-	int ia = threadIdx.x;
+	int u = blockIdx.x;
+	int v = blockIdx.y;
+	int a = threadIdx.x;
 
-	float u = -1. + (float) (1 + iu * 2) / nu;
-	float v = -1. + (float) (1 + iv * 2) / nv;
-	float w = -1. + (float) 1/nw;
-	float dw = (float) 2/nw;
+	float t00 = transformation[0 + 0*4 + a*4*4];
+	float t01 = transformation[1 + 0*4 + a*4*4];
+	float t02 = transformation[2 + 0*4 + a*4*4];
+	float t03 = transformation[3 + 0*4 + a*4*4];
 
-	float t00 = transformation[0 + 0*4 + ia*4*4];
-	float t01 = transformation[1 + 0*4 + ia*4*4];
-	float t02 = transformation[2 + 0*4 + ia*4*4];
-	float t03 = transformation[3 + 0*4 + ia*4*4];
+	float t10 = transformation[0 + 1*4 + a*4*4];
+	float t11 = transformation[1 + 1*4 + a*4*4];
+	float t12 = transformation[2 + 1*4 + a*4*4];
+	float t13 = transformation[3 + 1*4 + a*4*4];
 
-	float t10 = transformation[0 + 1*4 + ia*4*4];
-	float t11 = transformation[1 + 1*4 + ia*4*4];
-	float t12 = transformation[2 + 1*4 + ia*4*4];
-	float t13 = transformation[3 + 1*4 + ia*4*4];
-
-	float t20 = transformation[0 + 2*4 + ia*4*4];
-	float t21 = transformation[1 + 2*4 + ia*4*4];
-	float t22 = transformation[2 + 2*4 + ia*4*4];
-	float t23 = transformation[3 + 2*4 + ia*4*4];
+	float t20 = transformation[0 + 2*4 + a*4*4];
+	float t21 = transformation[1 + 2*4 + a*4*4];
+	float t22 = transformation[2 + 2*4 + a*4*4];
+	float t23 = transformation[3 + 2*4 + a*4*4];
 
 	float xx = t00 * u + t01 * v + t03;
 	float yy = t10 * u + t11 * v + t13;
@@ -36,15 +31,14 @@ void kernel_parallel(float* proj, cudaTextureObject_t texObjImg, float* transfor
 	float sum = 0;
 	float x, y, z;
 
-	for (int i = 0; i < nw; i++)
+	for (int w = 0; w < nw; w++)
 	{
 		x = xx + t02 * w;
 		y = yy + t12 * w;
 		z = zz + t22 * w;
 		sum += tex3D<float>(texObjImg, x+.5, y+.5, z+.5);
-		w += dw;
 	}
-	int idx = iu + iv*nu + ia*nu*nv;
+	int idx = u + v*nu + a*nu*nv;
 	proj[idx] = sum;
 }
 
