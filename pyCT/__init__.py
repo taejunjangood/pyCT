@@ -13,8 +13,8 @@ if hasattr(os, "add_dll_directory"):
     os.add_dll_directory(cuda_bin)
 
 
-import pyCT.forward as forward
-import pyCT.backward as backward
+from pyCT.forward import project
+from pyCT.backward import reconstruct
 from pyCT.parameter import getParameters
 from pyCT.phantom import getPhantom
 from pyCT.transformation import getTransformation

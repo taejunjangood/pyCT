@@ -42,7 +42,7 @@ def reconstruct(sinogram_array : np.ndarray,
     if filter is None or filter.lower() == 'none':
         pass
     else:
-        sinogram_array = applyFilter(sinogram_array, parameters, filter)
+        sinogram_array = _applyFilter(sinogram_array, parameters, filter)
 
     if is_cuda:
         reconstruction_array = np.zeros(nz*ny*nx, dtype=np.float32)
@@ -63,7 +63,7 @@ def reconstruct(sinogram_array : np.ndarray,
     return reconstruction_array
 
 
-def applyFilter(sinogram_array : np.ndarray, 
+def _applyFilter(sinogram_array : np.ndarray, 
                 parameters : _Parameters, 
                 filter : str):
     na = len(parameters.source.motion.rotation)
@@ -98,4 +98,8 @@ def applyFilter(sinogram_array : np.ndarray,
         fourier_filter *= np.fft.fftshift(np.hanning(extended_size))
 
     sinogram_array = np.fft.ifft(fourier_proj*fourier_filter, axis=-1).real
-    return sinogram_array[..., pad : -pad] * (np.pi/na/2/du/s2o*s2d)
+    if parameters.mode:
+        weight = np.pi / na / 2 / du / s2o * s2d
+    else:
+        weight = np.pi / na / 2 / du
+    return sinogram_array[..., pad : -pad] * weight
