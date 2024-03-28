@@ -17,7 +17,10 @@ def reconstruct(sinogram_array : np.ndarray,
         else:
             if kwargs['cuda']:
                 print('CUDA is not available ...')
-    
+    if 'offset' in kwargs.keys():
+        is_offsetCorrection = kwargs['offset']
+    else:
+        is_offsetCorrection = False
     # check filter            
     if filter is not None and filter.lower() not in ['none', 'ramp', 'ram-lak', 'shepp-logan', 'cosine', 'hamming', 'hann']:
         raise ValueError('{} was not supported in pyCT'.format(filter) + '\nWe support the following filters: ramp or ram-lak, shepp-logan, cosine, hamming, hann')
@@ -32,12 +35,16 @@ def reconstruct(sinogram_array : np.ndarray,
 
     su, sv = parameters.detector.length.get()
     du, dv = parameters.detector.spacing.get()
+    ou, ov = parameters.detector.offset.get()
 
     na = len(parameters.source.motion.rotation)
     
     # get transformation
     transformation = pyCT.getTransformation(parameters, 1)
     transformationMatrix = transformation.getBackward()
+
+    if is_offsetCorrection:
+        sinogram_array = _applyOffsetCorrection(sinogram_array, parameters)
     
     if filter is None or filter.lower() == 'none':
         pass
@@ -49,23 +56,38 @@ def reconstruct(sinogram_array : np.ndarray,
         transformationMatrix = transformationMatrix.flatten().astype(np.float32)
         sinogram_array = sinogram_array.flatten().astype(np.float32)
         if mode:
-            reconstruction_array = deepcopy(reconstructConeBeamGPU(reconstruction_array, transformationMatrix, sinogram_array, nx, ny, nz, nu, nv, na, su, sv, du, dv, s2d))
+            reconstruction_array = deepcopy(reconstructConeBeamGPU(reconstruction_array, transformationMatrix, sinogram_array, nx, ny, nz, nu, nv, na, su, sv, du, dv, ou, ov, s2d))
         else:
             reconstruction_array = deepcopy(reconstructParallelBeamGPU(reconstruction_array, transformationMatrix, sinogram_array, nx, ny, nz, nu, nv, na))
         reconstruction_array = reconstruction_array.reshape(nz, ny, nx)
     else:
         reconstruction_array = np.zeros([nz, ny, nx])
         if mode:
-            reconstructConeBeamCPU(reconstruction_array, transformationMatrix, sinogram_array, nx, ny, nz, nu, nv, na, su, sv, du, dv, s2d)
+            reconstructConeBeamCPU(reconstruction_array, transformationMatrix, sinogram_array, nx, ny, nz, nu, nv, na, su, sv, du, dv, ou, ov, s2d)
         else:
             reconstructParallelBeamCPU(reconstruction_array, transformationMatrix, sinogram_array, nx, ny, nz, nu, nv, na)
     
     return reconstruction_array
 
+def _applyOffsetCorrection(sinogram_array : np.ndarray, 
+                           parameters : _Parameters):
+    
+    weight = np.ones(sinogram_array.shape)
+    gap = int((parameters.detector.length.u/2 - parameters.detector.offset.u) / parameters.detector.spacing.u)
+    if parameters.detector.offset.u != 0 and gap > 0:
+        if parameters.detector.offset.u > 0:
+            f = (1+np.cos(np.linspace(-np.pi, 0, gap*2))) / 2
+            weight[:,:,:2*gap] = f
+        elif parameters.detector.offset.u < 0:
+            f =  (1+np.cos(np.linspace(0, np.pi, gap*2))) / 2
+            weight[:,:,-2*gap:] = f
+        return 2 * weight * sinogram_array
+    else:
+        return sinogram_array
 
 def _applyFilter(sinogram_array : np.ndarray, 
-                parameters : _Parameters, 
-                filter : str):
+                 parameters : _Parameters, 
+                 filter : str):
     na = len(parameters.source.motion.rotation)
     nu = parameters.detector.size.u
     du = parameters.detector.spacing.u

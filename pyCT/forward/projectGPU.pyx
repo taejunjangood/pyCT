@@ -6,7 +6,7 @@ ctypedef cnp.float32_t DTYPE
 
 cdef extern from "forward.h":
     void funcParallelBeam(float *detector_array, float *transformation, float *object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na)
-    void funcConeBeam    (float *detector_array, float *transformation, float *object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na, float su, float sv, float s2d, float near, float far);
+    void funcConeBeam    (float *detector_array, float *transformation, float *object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na, float su, float sv, float ou, float ov, float s2d, float near, float far);
 
 
 def projectParallelBeamGPU(cnp.ndarray[DTYPE, ndim=1] detector_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na):
@@ -25,13 +25,13 @@ def projectParallelBeamGPU(cnp.ndarray[DTYPE, ndim=1] detector_array, cnp.ndarra
     return new
 
 
-def projectConeBeamGPU(cnp.ndarray[DTYPE, ndim=1] detector_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na, float su, float sv, float s2d, float near, float far):
+def projectConeBeamGPU(cnp.ndarray[DTYPE, ndim=1] detector_array, cnp.ndarray[DTYPE, ndim=1] transformation, cnp.ndarray[DTYPE, ndim=1] object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na, float su, float sv, float ou, float ov, float s2d, float near, float far):
 
     cdef float *c_detector_array = <float *> detector_array.data
     cdef float *c_transformation = <float *> transformation.data
     cdef float *c_object_array = <float *> object_array.data
 
-    funcConeBeam(c_detector_array, c_transformation, c_object_array, nx, ny, nz, nu, nv, nw, na, su, sv, s2d, near, far)
+    funcConeBeam(c_detector_array, c_transformation, c_object_array, nx, ny, nz, nu, nv, nw, na, su, sv, ou, ov, s2d, near, far)
 
     cdef cnp.npy_intp shape[1]
     shape[0] = <cnp.npy_intp> (na*nv*nu)

@@ -89,7 +89,7 @@ void funcParallelBeam(float *reconstruction_array, float *transformation, float 
 }
 
 __global__ 
-void kernel_cone(float* recon, cudaTextureObject_t texObjSino, float* transformation, int na, float su, float sv, float du, float dv, float s2d)
+void kernel_cone(float* recon, cudaTextureObject_t texObjSino, float* transformation, int na, float su, float sv, float du, float dv, float ou, float ov, float s2d)
 {
 	int nx = gridDim.x;
 	int ny = gridDim.y;
@@ -124,15 +124,15 @@ void kernel_cone(float* recon, cudaTextureObject_t texObjSino, float* transforma
 		v = t10 * x + t11 * y + t12 * z + t13;
 		w = t20 * x + t21 * y + t22 * z + t23;
 
-		u = (u / w * -s2d + su/2)/du;
-		v = (v / w * -s2d + sv/2)/dv;
+		u = (u / w * -s2d + su/2 - ou)/du;
+		v = (v / w * -s2d + sv/2 - ov)/dv;
 
 		idx = x + y*nx + z*nx*ny;
 		recon[idx] += tex3D<float>(texObjSino, u+.5, v+.5, a+.5);
 	}
 }
 
-void funcConeBeam(float *reconstruction_array, float *transformation, float *sinogram_array, int nx, int ny, int nz, int nu, int nv, int na, float su, float sv, float du, float dv, float s2d)
+void funcConeBeam(float *reconstruction_array, float *transformation, float *sinogram_array, int nx, int ny, int nz, int nu, int nv, int na, float su, float sv, float du, float dv, float ou, float ov, float s2d)
 {
 	// object array >> texture memory
 	const cudaExtent objSize = make_cudaExtent(nu, nv, na);
@@ -175,7 +175,7 @@ void funcConeBeam(float *reconstruction_array, float *transformation, float *sin
 	float *d_reconstruction_array;
 	cudaMalloc(&d_reconstruction_array, nx * ny * nz * sizeof(float));
 	//
-	kernel_cone <<< dim3(nx,ny,1), dim3(nz,1,1) >>> (d_reconstruction_array, tex_sinogram_array, d_transformation, na, su, sv, du, dv, s2d);
+	kernel_cone <<< dim3(nx,ny,1), dim3(nz,1,1) >>> (d_reconstruction_array, tex_sinogram_array, d_transformation, na, su, sv, du, dv, ou, ov, s2d);
 	cudaMemcpy(reconstruction_array, d_reconstruction_array, nx*ny*nz*sizeof(float), cudaMemcpyDeviceToHost);
 
 

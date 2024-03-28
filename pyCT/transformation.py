@@ -55,13 +55,14 @@ class _Transformation():
         else:
             nu, nv = self.__params.detector.size.get()
             du, dv = self.__params.detector.spacing.get()
+            ou, ov = self.__params.detector.offset.get()
             lengthNear = self.__params.source.distance.near
             lengthFar = self.__params.source.distance.far
             length = (lengthFar - lengthNear)
             self.viewTransformation = np.array(
                 [
-                    [1/du, 0   , 0         , -1/2+nu/2],
-                    [0   , 1/dv, 0         , -1/2+nv/2],
+                    [1/du, 0   , 0         , -1/2+nu/2 - ou/du],
+                    [0   , 1/dv, 0         , -1/2+nv/2 - ov/dv],
                     [0   , 0   , -nw/length, -nw*lengthNear/length],
                     [0   , 0   , 0         , 1]
                 ]

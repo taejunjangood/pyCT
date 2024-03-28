@@ -97,7 +97,7 @@ void funcParallelBeam(float *detector_array, float *transformation, float *objec
 
 
 __global__ 
-void kernel_cone(float* proj, cudaTextureObject_t texObjImg, float* transformation, int nw, float su, float sv, float s2d, float near, float far)
+void kernel_cone(float* proj, cudaTextureObject_t texObjImg, float* transformation, int nw, float su, float sv, float ou, float ov, float s2d, float near, float far)
 {
 	int nu = gridDim.x;
 	int nv = gridDim.y;
@@ -105,8 +105,8 @@ void kernel_cone(float* proj, cudaTextureObject_t texObjImg, float* transformati
 	int iv = blockIdx.y;
 	int ia = threadIdx.x;
 
-	float rx = -su/2 + su/2/nu + iu*su/nu;
-	float ry = -sv/2 + sv/2/nv + iv*sv/nv;
+	float rx = -su/2 + su/2/nu + iu*su/nu + ou;
+	float ry = -sv/2 + sv/2/nv + iv*sv/nv + ov;
 	float rz = -s2d;
 	float magnitude = powf((powf(rx,2.) + powf(ry,2.) + powf(rz,2.)), .5);
 	rx /= magnitude;
@@ -146,7 +146,7 @@ void kernel_cone(float* proj, cudaTextureObject_t texObjImg, float* transformati
 	proj[idx] = sum;
 }
 
-void funcConeBeam(float *detector_array, float *transformation, float *object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na, float su, float sv, float s2d, float near, float far)
+void funcConeBeam(float *detector_array, float *transformation, float *object_array, int nx, int ny, int nz, int nu, int nv, int nw, int na, float su, float sv, float ou, float ov, float s2d, float near, float far)
 {
 	// object array >> texture memory
 	const cudaExtent objSize = make_cudaExtent(nx, ny, nz);
@@ -189,7 +189,7 @@ void funcConeBeam(float *detector_array, float *transformation, float *object_ar
 	float *d_detector_array;
 	cudaMalloc(&d_detector_array, na * nu * nv * sizeof(float));
 	//
-	kernel_cone <<< dim3(nu,nv,1), dim3(na,1,1) >>> (d_detector_array, tex_object_array, d_transformation, nw, su, sv, s2d, near, far);
+	kernel_cone <<< dim3(nu,nv,1), dim3(na,1,1) >>> (d_detector_array, tex_object_array, d_transformation, nw, su, sv, ou, ov, s2d, near, far);
 	cudaMemcpy(detector_array, d_detector_array, na*nu*nv*sizeof(float), cudaMemcpyDeviceToHost);
 
 
