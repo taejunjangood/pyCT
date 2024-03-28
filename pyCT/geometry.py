@@ -12,7 +12,7 @@ def show(params : _Parameters,
          *args):
     
     ax = plt.figure(figsize=(10,10)).add_subplot(projection='3d')
-    proj = pyCT.forward.project(obj, params)[0]
+    proj = pyCT.project(obj, params)[0]
     
     params2 = params.copy()
     params2.object.size.set(np.array(params.object.size.get())//scale)
@@ -20,6 +20,10 @@ def show(params : _Parameters,
     params2.set()
     tf = pyCT.getTransformation(params2, 1)
     cube = rescale(obj, 1/scale, preserve_range=True, anti_aliasing=False)
+
+    su, sv = params.detector.length.get()
+    nu, nv = params.detector.size.get()
+    ou, ov = params.detector.offset.get()
 
     if obj is not None:
         # volume
@@ -34,9 +38,7 @@ def show(params : _Parameters,
         ax.voxels(x, y, z, filled=filled, facecolors=facecolors, shade=True)
 
         # projection
-        su, sv = params.detector.length.get()
-        nu, nv = params.detector.size.get()
-        X,Y = np.meshgrid(np.linspace(.5,su-.5,nu)-su/2, np.linspace(.5,sv-.5,nv)-sv/2)
+        X,Y = np.meshgrid(np.linspace(.5,su-.5,nu)-su/2+ou, np.linspace(.5,sv-.5,nv)-sv/2+ov)
         Z = np.ones_like(Y) * -params.source.distance.source2detector
         X,Y,Z,_ = np.linalg.inv(tf.cameraTransformation[0]) @ np.array([X.flatten(), Y.flatten(), Z.flatten(), np.ones(X.size)])
         X = X.reshape(proj.shape)
@@ -68,13 +70,13 @@ def show(params : _Parameters,
     up = cam[0,:-1,1]
     back = cam[0,:-1,2]
     source = cam[0,:-1,3]
-    detector_center = source - back * params.source.distance.source2detector
-    detector_right = detector_center + right*params.detector.length.u/2
-    detector_up = detector_center + up*params.detector.length.v/2
-    detector_right_up = detector_center + right*params.detector.length.u/2 + up*params.detector.length.v/2
-    detector_left_up = detector_center - right*params.detector.length.u/2 + up*params.detector.length.v/2
-    detector_right_down = detector_center + right*params.detector.length.u/2 - up*params.detector.length.v/2
-    detector_left_down = detector_center - right*params.detector.length.u/2 - up*params.detector.length.v/2
+    detector_center = source - back * params.source.distance.source2detector + right*ou + up*ov
+    detector_right = detector_center + right*su/2
+    detector_up = detector_center + up*sv/2
+    detector_right_up = detector_center + right*su/2 + up*sv/2
+    detector_left_up = detector_center - right*su/2 + up*sv/2
+    detector_right_down = detector_center + right*su/2 - up*sv/2
+    detector_left_down = detector_center - right*su/2 - up*sv/2
     
     temp = np.stack([source, detector_center]).T
     ax.plot(temp[0],temp[1],temp[2],color='orange',marker='o',linestyle='dashed')
