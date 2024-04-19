@@ -320,7 +320,7 @@ class BuildExtension(build_ext):
     
 
 
-ext1 = Extension('projectGPU',
+ext1 = Extension('projectionGPU',
                  sources=["pyCT/forward/projectionGPU.pyx", "pyCT/cuda/forward.cu"],
                  language="c++",
                  runtime_library_dirs=[CUDA["lib64"]] if not IS_WINDOWS else None,
@@ -328,7 +328,7 @@ ext1 = Extension('projectGPU',
                  libraries=["cudart"],
                  include_dirs=[NUMPY_INCLUDE, CUDA["include"], "pyCT/cuda"]
                 )
-ext2 = Extension('reconstructGPU',
+ext2 = Extension('reconstructionGPU',
                  sources=["pyCT/backward/reconstructionGPU.pyx", "pyCT/cuda/backward.cu"],
                  language="c++",
                  runtime_library_dirs=[CUDA["lib64"]] if not IS_WINDOWS else None,
