@@ -35,7 +35,7 @@ def project(object_array : np.ndarray,
     nw = int((far - near) / ray_step)
     na = len(parameters.source.motion.rotation)
     su, sv = parameters.detector.length.get()
-    ou, ov = parameters.detector.offset.get()
+    ou, ov = parameters.detector.motion.translation.T
     
     # get transformation
     transformation = pyCT.getTransformation(parameters, nw)

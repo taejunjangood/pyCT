@@ -11,7 +11,7 @@ def show(params : _Parameters,
          view   : list       = None,
          *args):
     
-    ax = plt.figure(figsize=(10,10)).add_subplot(projection='3d')
+    ax = plt.figure(figsize=(10,10)).add_subplot(projection='3d', computed_zorder=False)
     proj = pyCT.project(obj, params)[0]
     
     params2 = params.copy()
@@ -23,7 +23,8 @@ def show(params : _Parameters,
 
     su, sv = params.detector.length.get()
     nu, nv = params.detector.size.get()
-    ou, ov = params.detector.offset.get()
+    ou, ov = params.detector.motion.translation[0]
+    theta = params.detector.motion.rotation[0]
 
     if obj is not None:
         # volume
@@ -38,13 +39,18 @@ def show(params : _Parameters,
         ax.voxels(x, y, z, filled=filled, facecolors=facecolors, shade=True)
 
         # projection
-        X,Y = np.meshgrid(np.linspace(.5,su-.5,nu)-su/2+ou, np.linspace(.5,sv-.5,nv)-sv/2+ov)
+        u = np.linspace(.5,su-.5,nu)-su/2
+        v = np.linspace(.5,sv-.5,nv)-sv/2
+        u,v = np.meshgrid(u, v)
+        u,v = u.flatten(), v.flatten()
+        X,Y = np.array([[np.cos(theta), np.sin(theta)],[-np.sin(theta),np.cos(theta)]]) @ np.stack([u,v]) + [[ou],[ov]]
+        # X,Y = np.meshgrid(np.linspace(.5,su-.5,nu)-su/2+ou, np.linspace(.5,sv-.5,nv)-sv/2+ov)
         Z = np.ones_like(Y) * -params.source.distance.source2detector
-        X,Y,Z,_ = np.linalg.inv(tf.cameraTransformation[0]) @ np.array([X.flatten(), Y.flatten(), Z.flatten(), np.ones(X.size)])
+        X,Y,Z,_ = np.linalg.inv(tf.cameraTransformation[0]) @ np.array([X, Y, Z, np.ones_like(X)])
         X = X.reshape(proj.shape)
         Y = Y.reshape(proj.shape)
         Z = Z.reshape(proj.shape)
-        ax.plot_surface(X, Y, Z, facecolors=np.repeat(proj[...,None], axis=-1, repeats=3)/proj.max(), alpha=.3)
+        ax.plot_surface(X, Y, Z, facecolors=np.repeat(proj[...,None], axis=-1, repeats=3)/proj.max(), alpha=.3, zorder=0)
         
     # volume outline
     x, y, z = params.object.length.get()
@@ -65,12 +71,13 @@ def show(params : _Parameters,
     ax.text(0,0,sz,'z')
 
     # camera
-    cam = np.linalg.inv(tf.cameraTransformation)
-    right = cam[0,:-1,0]
-    up = cam[0,:-1,1]
-    back = cam[0,:-1,2]
-    source = cam[0,:-1,3]
-    detector_center = source - back * params.source.distance.source2detector + right*ou + up*ov
+    rot = np.array([[np.cos(theta), np.sin(theta), 0, 0],[-np.sin(theta), np.cos(theta), 0, 0],[0,0,1,0],[0,0,0,1]])
+    cam = np.linalg.inv(tf.cameraTransformation[0]) @ rot
+    right = cam[:-1,0]
+    up = cam[:-1,1]
+    back = cam[:-1,2]
+    source = cam[:-1,3]
+    detector_center = source - back*params.source.distance.source2detector + [0,ou,ov]
     detector_right = detector_center + right*su/2
     detector_up = detector_center + up*sv/2
     detector_right_up = detector_center + right*su/2 + up*sv/2
