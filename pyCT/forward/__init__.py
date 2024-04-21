@@ -1,7 +1,7 @@
 import pyCT
 from pyCT.parameter import _Parameters
-from .projectCPU import *
-from projectGPU import projectParallelBeamGPU, projectConeBeamGPU
+from .projectionCPU import *
+from projectionGPU import projectParallelBeamGPU, projectConeBeamGPU
 from copy import deepcopy
 
 def project(object_array : np.ndarray,

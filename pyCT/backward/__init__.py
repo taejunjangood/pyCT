@@ -1,7 +1,7 @@
 import pyCT
 from pyCT.parameter import _Parameters
-from .reconstructCPU import *
-from reconstructGPU import reconstructParallelBeamGPU, reconstructConeBeamGPU
+from .reconstructionCPU import *
+from reconstructionGPU import reconstructParallelBeamGPU, reconstructConeBeamGPU
 from copy import deepcopy
 
 def reconstruct(sinogram_array : np.ndarray,

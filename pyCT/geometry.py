@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 
 def show(params : _Parameters, 
-         obj = None, 
-         scale = 4,
-         view = None,
+         obj    : np.ndarray = None, 
+         scale  : int        = 4,
+         view   : list       = None,
          *args):
     
     ax = plt.figure(figsize=(10,10)).add_subplot(projection='3d')

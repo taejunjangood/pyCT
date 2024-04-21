@@ -203,7 +203,7 @@ class _Detector():
         self.size = _2D()
         self.length = _2D()
         self.spacing = _2D()
-        self.offset = _2D()
+        self.offset = _2D(0., 0.)
         
 class _Source():
     def __init__(self):
