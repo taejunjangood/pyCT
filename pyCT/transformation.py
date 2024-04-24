@@ -55,21 +55,26 @@ class _Transformation():
         else:
             nu, nv = self.__params.detector.size.get()
             du, dv = self.__params.detector.spacing.get()
-            ou, ov = self.__params.detector.offset.get()
+            M = _getRotation(self.__params.detector.motion.rotation, 'z') @ _getTranslation2D(self.__params.detector.motion.translation / (-1*self.__params.detector.spacing.get()))
+            
             lengthNear = self.__params.source.distance.near
             lengthFar = self.__params.source.distance.far
             length = (lengthFar - lengthNear)
-            self.viewTransformation = np.array(
+            V = np.array(
                 [
-                    [1/du, 0   , 0         , -1/2+nu/2 - ou/du],
-                    [0   , 1/dv, 0         , -1/2+nv/2 - ov/dv],
+                    [1/du, 0   , 0         , -1/2+nu/2],
+                    [0   , 1/dv, 0         , -1/2+nv/2],
                     [0   , 0   , -nw/length, -nw*lengthNear/length],
                     [0   , 0   , 0         , 1]
                 ]
             )
+            self.viewTransformation = np.einsum('ij,ajk -> aik', V, M)
+
 
 def _makeRotation(angle, axis):
-    if type(angle) in [int, float]:
+    if type(angle) in [int, float, 
+                       np.uint64, np.uint32, np.uint16, np.uint8, np.int64, np. int32, np.int16, np.int8,
+                       np.float128, np.float64, np.float32, np.float16]:
         if axis == 'z':
             return np.array([[np.cos(angle), -np.sin(angle), 0, 0],
                              [np.sin(angle),  np.cos(angle), 0, 0],
@@ -106,26 +111,39 @@ def _makeRotation(angle, axis):
         else:
             raise ValueError('axis must be entered by one in {x, y, z}.')
 
-def _getRotation(angles, axes):
-    # angles: [na, nc], axes: [na] >> out: [na,4,4]
+def _getRotation(angles:np.ndarray, axes:str):
+    # angles: [na, nc], axes: [nc] >> out: [na,4,4]
     if type(angles) is not np.ndarray:
         angles = np.array(angles)
-    na, _ = angles.shape
+    na = angles.shape[0]
     R = np.eye(4)[None].repeat(na, axis=0)
     # (nc) loops
     for angle, axis in zip(angles.T, axes):
         R = _makeRotation(angle, axis) @ R
     return R
     
-def _getTranslation(offset):
-    if np.array(offset).shape == (3,):
+def _getTranslation(offset:np.ndarray):
+    if offset.shape == (3,):
         ox, oy, oz = offset
         return np.array([[1, 0, 0, ox],
                          [0, 1, 0, oy],
                          [0, 0, 1, oz],
                          [0, 0, 0, 1]])
-    elif len(np.array(offset).shape) == 2:
-        n, _ = np.array(offset).shape
+    elif len(offset.shape) == 2:
+        n, _ = offset.shape
         R = np.eye(4)[None,...].repeat(n, axis=0)
         R[:,:-1, -1] = offset
+        return R
+
+def _getTranslation2D(offset:np.ndarray):
+    if offset.shape == (2,):
+        ox, oy = offset
+        return np.array([[1, 0, 0, ox],
+                         [0, 1, 0, oy],
+                         [0, 0, 1, 0],
+                         [0, 0, 0, 1]])
+    elif len(offset.shape) == 2:
+        n, _ = offset.shape
+        R = np.eye(4)[None,...].repeat(n, axis=0)
+        R[:,:-2, -1] = offset
         return R
