@@ -340,7 +340,7 @@ ext2 = Extension('reconstructionGPU',
 setup(
     name="pyCT", 
     py_modules=['pyCT.py'],
-    version="0.1.2",
+    version="0.1.3",
     ext_modules=[ext1, ext2],
     cmdclass={"build_ext" : BuildExtension},
     packages=find_packages(),

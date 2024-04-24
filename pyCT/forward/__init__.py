@@ -33,9 +33,8 @@ def project(object_array : np.ndarray,
     nx, ny, nz = parameters.object.size.get()
     nu, nv = parameters.detector.size.get()
     nw = int((far - near) / ray_step)
-    na = len(parameters.source.motion.rotation)
+    na = len(parameters.source.motion.rotation.angles)
     su, sv = parameters.detector.length.get()
-    ou, ov = parameters.detector.motion.translation.T
     
     # get transformation
     transformation = pyCT.getTransformation(parameters, nw)
@@ -47,7 +46,9 @@ def project(object_array : np.ndarray,
         transformationMatrix = transformationMatrix.flatten().astype(np.float32)
         object_array = object_array.flatten().astype(np.float32)
         if mode:
-            detector_array = deepcopy(projectConeBeamGPU(detector_array, transformationMatrix, object_array,  nx, ny, nz, nu, nv, nw, na, su, sv, ou, ov, s2d, near, far))
+            oa = parameters.detector.motion.rotation.angles.astype(np.float32)
+            ou, ov = parameters.detector.motion.translation.vectors.astype(np.float32).T
+            detector_array = deepcopy(projectConeBeamGPU(detector_array, transformationMatrix, object_array,  nx, ny, nz, nu, nv, nw, na, su, sv, ou, ov, oa, s2d, near, far))
         else:
             detector_array = deepcopy(projectParallelBeamGPU(detector_array, transformationMatrix, object_array,  nx, ny, nz, nu, nv, nw, na))
         detector_array = detector_array.reshape(na, nv, nu)

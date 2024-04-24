@@ -1,6 +1,6 @@
 import numpy as np
 
-def getPhantom(shape, dtype=complex):
+def getPhantom(shape, dtype=float):
     """Generates a Shepp Logan phantom with a given shape and dtype.
 
     Args:
