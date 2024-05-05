@@ -6,8 +6,11 @@ from copy import deepcopy
 
 def reconstruct(sinogram_array : np.ndarray,
                 parameters : _Parameters,
-                filter = 'ramp',
+                filter : str = 'ramp',
                 **kwargs):
+    '''
+    key : cuda, offset
+    '''
     # check CUDA
     is_cuda = False if pyCT.CUDA is None else True        
     if 'cuda' in kwargs.keys():
@@ -17,30 +20,28 @@ def reconstruct(sinogram_array : np.ndarray,
         else:
             if kwargs['cuda']:
                 print('CUDA is not available ...')
+    
+    # set offset correction
     if 'offset' in kwargs.keys():
         is_offsetCorrection = kwargs['offset']
     else:
         is_offsetCorrection = False
-    # check filter            
+
+    # check filter
     if filter is not None and filter.lower() not in ['none', 'ramp', 'ram-lak', 'shepp-logan', 'cosine', 'hamming', 'hann']:
         raise ValueError('{} was not supported in pyCT'.format(filter) + '\nWe support the following filters: ramp or ram-lak, shepp-logan, cosine, hamming, hann')
 
     # get parameters
     mode = parameters.mode
-
     s2d = parameters.source.distance.source2detector
-    
     nx, ny, nz = parameters.object.size.get()
-    nu, nv = parameters.detector.size.get()
-
-    su, sv = parameters.detector.length.get()
     du, dv = parameters.detector.spacing.get()
-    ou, ov = parameters.detector.offset.get()
+    su, sv = parameters.detector.length.get()
+    nu, nv = parameters.detector.size.get()
+    na = len(parameters.source.motion.rotation.get()[0])
 
-    na = len(parameters.source.motion.rotation)
-    
     # get transformation
-    transformation = pyCT.getTransformation(parameters, 1)
+    transformation = pyCT.getTransformation(parameters, 1, 0, s2d)
     transformationMatrix = transformation.getBackward()
 
     if is_offsetCorrection:
@@ -53,32 +54,44 @@ def reconstruct(sinogram_array : np.ndarray,
 
     if is_cuda:
         reconstruction_array = np.zeros(nz*ny*nx, dtype=np.float32)
-        transformationMatrix = transformationMatrix.flatten().astype(np.float32)
         sinogram_array = sinogram_array.flatten().astype(np.float32)
+        transformationMatrix = transformationMatrix.flatten().astype(np.float32)
         if mode:
-            reconstruction_array = deepcopy(reconstructConeBeamGPU(reconstruction_array, transformationMatrix, sinogram_array, nx, ny, nz, nu, nv, na, su, sv, du, dv, ou, ov, s2d))
+            ou, ov = parameters.detector.motion.translation.get(axis=0).astype(np.float32)
+            oa = parameters.detector.motion.rotation.get().astype(np.float32)
+            if (len(ou) == 1) and (len(ov) == 1):
+                ou, ov = np.repeat(ou, na), np.repeat(ov, na)
+            if len(oa) == 1:
+                oa = np.repeat(oa, na)
+            reconstruction_array = deepcopy(reconstructConeBeamGPU(reconstruction_array, sinogram_array, transformationMatrix, nx, ny, nz, nu, nv, na, su, sv, du, dv, ou, ov, oa, s2d))
         else:
-            reconstruction_array = deepcopy(reconstructParallelBeamGPU(reconstruction_array, transformationMatrix, sinogram_array, nx, ny, nz, nu, nv, na))
+            reconstruction_array = deepcopy(reconstructParallelBeamGPU(reconstruction_array, sinogram_array, transformationMatrix, nx, ny, nz, nu, nv, na))
         reconstruction_array = reconstruction_array.reshape(nz, ny, nx)
     else:
         reconstruction_array = np.zeros([nz, ny, nx])
         if mode:
-            reconstructConeBeamCPU(reconstruction_array, transformationMatrix, sinogram_array, nx, ny, nz, nu, nv, na, su, sv, du, dv, ou, ov, s2d)
+            reconstructConeBeamCPU(reconstruction_array, sinogram_array, transformationMatrix, nx, ny, nz, nu, nv, na, su, sv, du, dv, ou, ov, oa, s2d)
         else:
-            reconstructParallelBeamCPU(reconstruction_array, transformationMatrix, sinogram_array, nx, ny, nz, nu, nv, na)
+            reconstructParallelBeamCPU(reconstruction_array, sinogram_array, transformationMatrix, nx, ny, nz, nu, nv, na)
     
     return reconstruction_array
 
+
 def _applyOffsetCorrection(sinogram_array : np.ndarray, 
                            parameters : _Parameters):
-    
     weight = np.ones(sinogram_array.shape)
-    gap = int((parameters.detector.length.u/2 - parameters.detector.offset.u) / parameters.detector.spacing.u)
-    if parameters.detector.offset.u != 0 and gap > 0:
-        if parameters.detector.offset.u > 0:
+    ou, _ = parameters.detector.motion.translation.get().T
+    oa = parameters.detector.motion.rotation.get()
+    if np.any(ou-ou[0]) or np.any(oa):
+        raise ValueError()
+    else:
+        ou = ou[0]
+    gap = int((parameters.detector.length.u/2 - ou) / parameters.detector.spacing.u)
+    if ou != 0 and gap > 0:
+        if ou > 0:
             f = (1+np.cos(np.linspace(-np.pi, 0, gap*2))) / 2
             weight[:,:,:2*gap] = f
-        elif parameters.detector.offset.u < 0:
+        elif ou < 0:
             f =  (1+np.cos(np.linspace(0, np.pi, gap*2))) / 2
             weight[:,:,-2*gap:] = f
         return 2 * weight * sinogram_array
@@ -88,17 +101,17 @@ def _applyOffsetCorrection(sinogram_array : np.ndarray,
 def _applyFilter(sinogram_array : np.ndarray, 
                  parameters : _Parameters, 
                  filter : str):
-    na = len(parameters.source.motion.rotation)
+    na = len(parameters.source.motion.rotation.get()[0])
     nu = parameters.detector.size.u
     du = parameters.detector.spacing.u
-    s2o = parameters.source.distance.source2object
+    s2o = parameters.source.distance.source2origin
     s2d = parameters.source.distance.source2detector
 
     extended_size = max(64, int(2 ** np.ceil(np.log2(2 * nu))))
     pad = (extended_size - nu) // 2
 
-    n = np.concatenate((np.arange(1, nu + 1, 2, dtype=np.uint32),
-                            np.arange(nu - 1, 0, -2, dtype=np.uint32)))
+    n = np.concatenate((np.arange(1, extended_size/2 + 1, 2, dtype=np.uint32),
+                            np.arange(extended_size/2 - 1, 0, -2, dtype=np.uint32)))
     f = np.zeros(extended_size)
     f[0] = 0.25
     f[1::2] = -1 / (np.pi * n) ** 2
