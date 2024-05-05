@@ -11,20 +11,21 @@ def show(params : _Parameters,
          view   : list       = None,
          *args):
     
-    ax = plt.figure(figsize=(10,10)).add_subplot(projection='3d', computed_zorder=False)
+    fig = plt.figure(figsize=(10,10))
+    ax = fig.add_subplot(projection='3d', computed_zorder=False)
     proj = pyCT.project(obj, params)[0]
     
     params2 = params.copy()
     params2.object.size.set(np.array(params.object.size.get())//scale)
     params2.object.spacing.set(np.array(params.object.spacing.get())*scale)
     params2.set()
-    tf = pyCT.getTransformation(params2, 1)
+    tf = pyCT.getTransformation(params2, 1, 0, 1)
     cube = rescale(obj, 1/scale, preserve_range=True, anti_aliasing=False)
 
     su, sv = params.detector.length.get()
     nu, nv = params.detector.size.get()
-    ou, ov = params.detector.motion.translation[0]
-    theta = params.detector.motion.rotation[0]
+    ou, ov = params.detector.motion.translation.get()[0]
+    oa = params.detector.motion.rotation.get()[0]
 
     if obj is not None:
         # volume
@@ -43,8 +44,7 @@ def show(params : _Parameters,
         v = np.linspace(.5,sv-.5,nv)-sv/2
         u,v = np.meshgrid(u, v)
         u,v = u.flatten(), v.flatten()
-        X,Y = np.array([[np.cos(theta), np.sin(theta)],[-np.sin(theta),np.cos(theta)]]) @ np.stack([u,v]) + [[ou],[ov]]
-        # X,Y = np.meshgrid(np.linspace(.5,su-.5,nu)-su/2+ou, np.linspace(.5,sv-.5,nv)-sv/2+ov)
+        X,Y = np.array([[np.cos(oa), np.sin(oa)],[-np.sin(oa),np.cos(oa)]]) @ np.stack([u,v]) + [[ou],[ov]]
         Z = np.ones_like(Y) * -params.source.distance.source2detector
         X,Y,Z,_ = np.linalg.inv(tf.cameraTransformation[0]) @ np.array([X, Y, Z, np.ones_like(X)])
         X = X.reshape(proj.shape)
@@ -62,7 +62,7 @@ def show(params : _Parameters,
     ax.plot([x/2,x/2],[y/2,y/2],[-z/2,z/2], '--', color='gray', alpha=.5)
     
     # axis
-    sx, sy, sz = params.object.length.get()
+    sx, sy, sz = params.object.length.get()/2
     ax.plot([-sx,sx],[0,0],[0,0], 'k')
     ax.text(sx,0,0,'x')
     ax.plot([0,0],[-sy,sy],[0,0], 'k')
@@ -71,7 +71,7 @@ def show(params : _Parameters,
     ax.text(0,0,sz,'z')
 
     # camera
-    rot = np.array([[np.cos(theta), np.sin(theta), 0, 0],[-np.sin(theta), np.cos(theta), 0, 0],[0,0,1,0],[0,0,0,1]])
+    rot = np.array([[np.cos(oa), np.sin(oa), 0, 0],[-np.sin(oa), np.cos(oa), 0, 0],[0,0,1,0],[0,0,0,1]])
     cam = np.linalg.inv(tf.cameraTransformation[0]) @ rot
     right = cam[:-1,0]
     up = cam[:-1,1]
@@ -99,3 +99,5 @@ def show(params : _Parameters,
     ax.axis('equal')
     if view is not None:
         ax.view_init(azim=view[0], elev=view[1], roll=view[2])
+    
+    return fig

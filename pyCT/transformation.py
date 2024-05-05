@@ -1,25 +1,25 @@
 import numpy as np
 from pyCT.parameter import _Parameters
 
-def getTransformation(params, nw):
-    return _Transformation(params, nw)
+def getTransformation(params, nw, near, far):
+    return _Transformation(params, nw, near, far)
 
 class _Transformation():
-    def __init__(self, params:_Parameters, nw:int):
-        self.worldTransformation = None
-        self.cameraTransformation = None
-        self.viewTransformation = None
+    def __init__(self, params:_Parameters, nw:int, near:float, far:float):
+        self.worldTransformation  : np.ndarray = None
+        self.cameraTransformation : np.ndarray = None
+        self.viewTransformation   : np.ndarray = None
         self.__params = params
 
         self.__setWorldTransformation()
         self.__setCameraTransformation()
         if not params.mode:
-            self.__setViewTransformation(nw)
+            self.__setViewTransformation(nw, near, far)
 
-    def getForward(self):
+    def getForward(self) -> np.ndarray:
         return np.linalg.inv(self.getBackward())
     
-    def getBackward(self):
+    def getBackward(self) -> np.ndarray:
         if self.__params.mode:
             return np.einsum('aij,ajk->aik', self.cameraTransformation, self.worldTransformation)
         else:
@@ -29,49 +29,61 @@ class _Transformation():
     def __setWorldTransformation(self):
         dx, dy, dz = self.__params.object.spacing.get()
         sx, sy, sz = self.__params.object.length.get()
+        angles, axes = self.__params.object.motion.rotation.get()
+        vectors = self.__params.object.motion.translation.get()
         self.worldTransformation = np.array([[dx, 0 , 0 , -sx/2+dx/2], 
                                              [0 , dy, 0 , -sy/2+dy/2], 
                                              [0 , 0 , dz, -sz/2+dz/2], 
                                              [0 , 0 , 0 , 1]])
         # [A,4,4]x[4,4] -> [A,4,4]
-        self.worldTransformation = np.einsum('aij,jk->aik', _getRotation(self.__params.object.motion.rotation, 'zxz'), self.worldTransformation)
-        self.worldTransformation = np.einsum('aij,ajk->aik', _getTranslation(self.__params.object.motion.translation), self.worldTransformation)
+        self.worldTransformation = np.einsum('aij,jk->aik', _getRotation(angles, axes), self.worldTransformation)
+        self.worldTransformation = np.einsum('aij,ajk->aik', _getTranslation(vectors), self.worldTransformation)
 
     
     def __setCameraTransformation(self):
+        angles, axes = self.__params.source.motion.rotation.get()
+        vectors = self.__params.source.motion.translation.get()
+        s2o = self.__params.source.distance.source2origin
         detectorFrame = np.array([[0,0,1,0],
                                   [1,0,0,0],
                                   [0,1,0,0],
                                   [0,0,0,1]])
         # [A,4,4]x[4,4] -> [A,4,4]
-        detectorFrame = np.einsum('aij,jk->aki', _getRotation(self.__params.source.motion.rotation, 'zxz'), detectorFrame)
-        sourceOrigin = self.__params.source.distance.source2object * detectorFrame[:, 2, :3] + self.__params.source.motion.translation # [A,3]
+        detectorFrame = np.einsum('aij,jk->aki', _getRotation(angles, axes), detectorFrame)
+        sourceOrigin = s2o * detectorFrame[:, 2, :3] + vectors # [A,3]
         self.cameraTransformation = np.einsum('aij,ajk->aik', detectorFrame, _getTranslation(-sourceOrigin))
 
 
-    def __setViewTransformation(self, nw):
+    def __setViewTransformation(self, nw, near, far):
         if self.__params.mode:
             pass
         else:
             nu, nv = self.__params.detector.size.get()
             du, dv = self.__params.detector.spacing.get()
-            M = _getRotation(self.__params.detector.motion.rotation, 'z') @ _getTranslation2D(self.__params.detector.motion.translation / (-1*self.__params.detector.spacing.get()))
-            
-            lengthNear = self.__params.source.distance.near
-            lengthFar = self.__params.source.distance.far
-            length = (lengthFar - lengthNear)
-            V = np.array(
+            angles = self.__params.detector.motion.rotation.get()
+            vectors = self.__params.detector.motion.translation.get()
+            length = far - near
+            viewMatrix = np.array(
                 [
                     [1/du, 0   , 0         , -1/2+nu/2],
                     [0   , 1/dv, 0         , -1/2+nv/2],
-                    [0   , 0   , -nw/length, -nw*lengthNear/length],
+                    [0   , 0   , -nw/length, -nw*near/length],
                     [0   , 0   , 0         , 1]
                 ]
             )
-            self.viewTransformation = np.einsum('ij,ajk -> aik', V, M)
+            motionMatrix = _getRotation(angles, 'z') @ _getTranslation(-1*vectors)
+            self.viewTransformation = np.einsum('ij,ajk -> aik', viewMatrix, motionMatrix)
 
 
-def _makeRotation(angle, axis):
+def _makeRotation(angle, 
+                  axis:str
+                  ) -> np.ndarray:
+    '''
+    angle : (1,)
+    axis  : (1,)
+    ->
+    mat    : (4,4)
+    '''
     if type(angle) in [int, float, 
                        np.uint64, np.uint32, np.uint16, np.uint8, np.int64, np. int32, np.int16, np.int8,
                        np.float128, np.float64, np.float32, np.float16]:
@@ -112,10 +124,14 @@ def _makeRotation(angle, axis):
             raise ValueError('axis must be entered by one in {x, y, z}.')
 
 def _getRotation(angles:np.ndarray, axes:str):
+    '''
+    angles : (num_angles, num_rots)
+    axes   : (num_rots)
+    ->
+    output : (num_angles, 4, 4)
+    '''
     # angles: [na, nc], axes: [nc] >> out: [na,4,4]
-    if type(angles) is not np.ndarray:
-        angles = np.array(angles)
-    na = angles.shape[0]
+    na = len(angles)
     R = np.eye(4)[None].repeat(na, axis=0)
     # (nc) loops
     for angle, axis in zip(angles.T, axes):
@@ -123,27 +139,10 @@ def _getRotation(angles:np.ndarray, axes:str):
     return R
     
 def _getTranslation(offset:np.ndarray):
-    if offset.shape == (3,):
-        ox, oy, oz = offset
-        return np.array([[1, 0, 0, ox],
-                         [0, 1, 0, oy],
-                         [0, 0, 1, oz],
-                         [0, 0, 0, 1]])
-    elif len(offset.shape) == 2:
-        n, _ = offset.shape
-        R = np.eye(4)[None,...].repeat(n, axis=0)
-        R[:,:-1, -1] = offset
+    na, dim = offset.shape
+    if (dim == 3) or (dim == 2):
+        R = np.eye(4)[None,...].repeat(na, axis=0)
+        R[:, :dim, -1] = offset
         return R
-
-def _getTranslation2D(offset:np.ndarray):
-    if offset.shape == (2,):
-        ox, oy = offset
-        return np.array([[1, 0, 0, ox],
-                         [0, 1, 0, oy],
-                         [0, 0, 1, 0],
-                         [0, 0, 0, 1]])
-    elif len(offset.shape) == 2:
-        n, _ = offset.shape
-        R = np.eye(4)[None,...].repeat(n, axis=0)
-        R[:,:-2, -1] = offset
-        return R
+    else:
+        raise ValueError()

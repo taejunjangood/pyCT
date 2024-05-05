@@ -12,7 +12,7 @@ void kernel_parallel(float* recon, cudaTextureObject_t texObjSino, float* transf
 	float t00, t01, t02, t03;
 	float t10, t11, t12, t13;
 	float t20, t21, t22, t23;
-	float u, v, w;
+	float u, v;
 	int idx;
 
 	for (int a = 0; a < na; a++)
@@ -35,11 +35,11 @@ void kernel_parallel(float* recon, cudaTextureObject_t texObjSino, float* transf
 	}
 }
 
-void funcParallelBeam(float *reconstruction_array, float *transformation, float *sinogram_array, int nx, int ny, int nz, int nu, int nv, int na)
+void funcParallelBeam(float* reconstruction_array, float* sinogram_array, float* transformation, int nx, int ny, int nz, int nu, int nv, int na)
 {
 	// object array >> texture memory
 	const cudaExtent objSize = make_cudaExtent(nu, nv, na);
-	cudaArray *d_sinogram_array = 0;
+	cudaArray* d_sinogram_array = 0;
 	cudaTextureObject_t tex_sinogram_array = 0;
 
 	// create 3D array
@@ -70,17 +70,14 @@ void funcParallelBeam(float *reconstruction_array, float *transformation, float 
 
 	cudaCreateTextureObject(&tex_sinogram_array, &texRes, &texDescr, NULL);
 
-	//
-	float *d_transformation;
+	float* d_transformation;
 	cudaMalloc(&d_transformation, na * 4 * 4 * sizeof(float));
 	cudaMemcpy(d_transformation, transformation, na * 4 * 4 * sizeof(float), cudaMemcpyHostToDevice);
-	//
-	float *d_reconstruction_array;
+	float* d_reconstruction_array;
 	cudaMalloc(&d_reconstruction_array, nx * ny * nz * sizeof(float));
-	//
+	
 	kernel_parallel <<< dim3(nx,ny,1), dim3(nz,1,1) >>> (d_reconstruction_array, tex_sinogram_array, d_transformation, na);
 	cudaMemcpy(reconstruction_array, d_reconstruction_array, nx*ny*nz*sizeof(float), cudaMemcpyDeviceToHost);
-
 
 	cudaFree(d_reconstruction_array);
 	cudaFree(d_transformation);
@@ -89,7 +86,7 @@ void funcParallelBeam(float *reconstruction_array, float *transformation, float 
 }
 
 __global__ 
-void kernel_cone(float* recon, cudaTextureObject_t texObjSino, float* transformation, int na, float su, float sv, float du, float dv, float ou, float ov, float s2d)
+void kernel_cone(float* recon, cudaTextureObject_t texObjSino, float* transformation, int na, float su, float sv, float du, float dv, float *ou, float *ov, float *oa, float s2d)
 {
 	int nx = gridDim.x;
 	int ny = gridDim.y;
@@ -101,6 +98,7 @@ void kernel_cone(float* recon, cudaTextureObject_t texObjSino, float* transforma
 	float t10, t11, t12, t13;
 	float t20, t21, t22, t23;
 	float u, v, w;
+	float u_, v_;
 	int idx;
 
 	for (int a = 0; a < na; a++)
@@ -124,19 +122,21 @@ void kernel_cone(float* recon, cudaTextureObject_t texObjSino, float* transforma
 		v = t10 * x + t11 * y + t12 * z + t13;
 		w = t20 * x + t21 * y + t22 * z + t23;
 
-		u = (u / w * -s2d + su/2 - ou)/du;
-		v = (v / w * -s2d + sv/2 - ov)/dv;
+		u_ = cosf(oa[a])*u - sinf(oa[a])*v;
+		v_ = sinf(oa[a])*u + cosf(oa[a])*v;
+		u = (u_ / w * -s2d + su/2 - ou[a])/du;
+		v = (v_ / w * -s2d + sv/2 - ov[a])/dv;
 
 		idx = x + y*nx + z*nx*ny;
 		recon[idx] += tex3D<float>(texObjSino, u+.5, v+.5, a+.5);
 	}
 }
 
-void funcConeBeam(float *reconstruction_array, float *transformation, float *sinogram_array, int nx, int ny, int nz, int nu, int nv, int na, float su, float sv, float du, float dv, float ou, float ov, float s2d)
+void funcConeBeam(float* reconstruction_array, float* sinogram_array, float* transformation, int nx, int ny, int nz, int nu, int nv, int na, float su, float sv, float du, float dv, float* ou, float* ov, float* oa, float s2d)
 {
 	// object array >> texture memory
 	const cudaExtent objSize = make_cudaExtent(nu, nv, na);
-	cudaArray *d_sinogram_array = 0;
+	cudaArray* d_sinogram_array = 0;
 	cudaTextureObject_t tex_sinogram_array = 0;
 
 	// create 3D array
@@ -166,21 +166,30 @@ void funcConeBeam(float *reconstruction_array, float *transformation, float *sin
 	texDescr.readMode = cudaReadModeElementType;
 
 	cudaCreateTextureObject(&tex_sinogram_array, &texRes, &texDescr, NULL);
-
-	//
-	float *d_transformation;
+	
+	float* d_transformation;
 	cudaMalloc(&d_transformation, na * 4 * 4 * sizeof(float));
 	cudaMemcpy(d_transformation, transformation, na * 4 * 4 * sizeof(float), cudaMemcpyHostToDevice);
-	//
-	float *d_reconstruction_array;
+	float* d_reconstruction_array;
 	cudaMalloc(&d_reconstruction_array, nx * ny * nz * sizeof(float));
-	//
-	kernel_cone <<< dim3(nx,ny,1), dim3(nz,1,1) >>> (d_reconstruction_array, tex_sinogram_array, d_transformation, na, su, sv, du, dv, ou, ov, s2d);
+	float* d_ou;
+	cudaMalloc(&d_ou, na * sizeof(float));
+	cudaMemcpy(d_ou, ou, na * sizeof(float), cudaMemcpyHostToDevice);
+	float* d_ov;
+	cudaMalloc(&d_ov, na * sizeof(float));
+	cudaMemcpy(d_ov, ov, na * sizeof(float), cudaMemcpyHostToDevice);
+	float* d_oa;
+	cudaMalloc(&d_oa, na * sizeof(float));
+	cudaMemcpy(d_oa, oa, na * sizeof(float), cudaMemcpyHostToDevice);
+	
+	kernel_cone <<< dim3(nx,ny,1), dim3(nz,1,1) >>> (d_reconstruction_array, tex_sinogram_array, d_transformation, na, su, sv, du, dv, d_ou, d_ov, d_oa, s2d);
 	cudaMemcpy(reconstruction_array, d_reconstruction_array, nx*ny*nz*sizeof(float), cudaMemcpyDeviceToHost);
-
 
 	cudaFree(d_reconstruction_array);
 	cudaFree(d_transformation);
+	cudaFree(d_ou);
+	cudaFree(d_ov);
+	cudaFree(d_oa);
 	cudaFreeArray(d_sinogram_array);
 	cudaDestroyTextureObject(tex_sinogram_array);
 }

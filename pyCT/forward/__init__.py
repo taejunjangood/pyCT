@@ -5,8 +5,11 @@ from projectionGPU import projectParallelBeamGPU, projectConeBeamGPU
 from copy import deepcopy
 
 def project(object_array : np.ndarray,
-            parameters : _Parameters,
+            parameters   : _Parameters,
             **kwargs):
+    '''
+    key : cuda, ray_step
+    '''
     # check CUDA
     is_cuda = False if pyCT.CUDA is None else True        
     if 'cuda' in kwargs.keys():
@@ -22,41 +25,61 @@ def project(object_array : np.ndarray,
         ray_step = kwargs['ray_step']
     else:
         ray_step = .5
-
+    
     # get parameters
     mode = parameters.mode
-
-    near = parameters.source.distance.near
-    far = parameters.source.distance.far
     s2d = parameters.source.distance.source2detector
-    
     nx, ny, nz = parameters.object.size.get()
-    nu, nv = parameters.detector.size.get()
-    nw = int((far - near) / ray_step)
-    na = len(parameters.source.motion.rotation)
     su, sv = parameters.detector.length.get()
-    ou, ov = parameters.detector.motion.translation.T
+    nu, nv = parameters.detector.size.get()
+    na = len(parameters.source.motion.rotation.get()[0])
+    near, far, nw = _getNearFar(parameters, ray_step)
     
     # get transformation
-    transformation = pyCT.getTransformation(parameters, nw)
+    transformation = pyCT.getTransformation(parameters, nw, near, far)
     transformationMatrix = transformation.getForward()
 
     # run
     if is_cuda:
         detector_array = np.zeros(na*nv*nu, dtype=np.float32)
-        transformationMatrix = transformationMatrix.flatten().astype(np.float32)
         object_array = object_array.flatten().astype(np.float32)
+        transformationMatrix = transformationMatrix.flatten().astype(np.float32)
         if mode:
-            detector_array = deepcopy(projectConeBeamGPU(detector_array, transformationMatrix, object_array,  nx, ny, nz, nu, nv, nw, na, su, sv, ou, ov, s2d, near, far))
+            ou, ov = parameters.detector.motion.translation.get(axis=0).astype(np.float32)
+            oa = parameters.detector.motion.rotation.get().astype(np.float32)
+            if (len(ou) == 1) and (len(ov) == 1):
+                ou, ov = np.repeat(ou, na), np.repeat(ov, na)
+            if len(oa) == 1:
+                oa = np.repeat(oa, na)
+            detector_array = deepcopy(projectConeBeamGPU(detector_array, object_array, transformationMatrix, nx, ny, nz, nu, nv, nw, na, su, sv, ou, ov, oa, s2d, near, far))
         else:
-            detector_array = deepcopy(projectParallelBeamGPU(detector_array, transformationMatrix, object_array,  nx, ny, nz, nu, nv, nw, na))
+            detector_array = deepcopy(projectParallelBeamGPU(detector_array, object_array, transformationMatrix, nx, ny, nz, nu, nv, nw, na))
         detector_array = detector_array.reshape(na, nv, nu)
     
     else:
         detector_array = np.zeros([na, nv, nu])
         if mode:
-            projectConeBeamCPU(detector_array, transformationMatrix, object_array, nx, ny, nz, nu, nv, nw, na, su, sv, ou, ov, s2d, near, far)
+            ou, ov = parameters.detector.motion.translation.get(axis=0).astype(np.float32)
+            oa = parameters.detector.motion.rotation.get().astype(np.float32)
+            if (len(ou) == 1) and (len(ov) == 1):
+                ou, ov = np.repeat(ou, na), np.repeat(ov, na)
+            if len(oa) == 1:
+                oa = np.repeat(oa, na)
+            projectConeBeamCPU(detector_array, object_array, transformationMatrix, nx, ny, nz, nu, nv, nw, na, su, sv, ou, ov, oa, s2d, near, far)
         else:
-            projectParallelBeamCPU(detector_array, transformationMatrix, object_array, nx, ny, nz, nu, nv, nw, na)
+            projectParallelBeamCPU(detector_array, object_array, transformationMatrix, nx, ny, nz, nu, nv, nw, na)
     
     return detector_array * ray_step
+
+
+def _getNearFar(params:_Parameters, ray_step:float):
+    s2o = params.source.distance.source2origin
+    s2d = params.source.distance.source2detector
+    lo = np.linalg.norm(params.object.length.get()/2)
+    to = np.linalg.norm(params.object.motion.translation.get()-params.source.motion.translation.get(), axis=1).max()
+    td = params.detector.length.get()/2 + np.abs(params.detector.motion.translation.get())
+    near = max(0, s2o-lo-to)
+    far = min(s2o+lo+to, np.sqrt(s2d**2 + np.sum(td**2, axis=1).max())) if params.mode else min(s2o+lo+to, s2d)
+    nw = int((far - near) / ray_step)
+    far = near + nw*ray_step
+    return near, far, nw
