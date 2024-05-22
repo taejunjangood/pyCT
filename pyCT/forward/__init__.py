@@ -73,6 +73,8 @@ def project(object_array : np.ndarray,
 
 
 def _getNearFar(params:_Parameters, ray_step:float):
+    if ray_step < 0:
+        raise ValueError("ray_step must be larger than zero.")
     s2o = params.source.distance.source2origin
     s2d = params.source.distance.source2detector
     lo = np.linalg.norm(params.object.length.get()/2)
@@ -80,6 +82,9 @@ def _getNearFar(params:_Parameters, ray_step:float):
     td = params.detector.length.get()/2 + np.abs(params.detector.motion.translation.get())
     near = max(0, s2o-lo-to)
     far = min(s2o+lo+to, np.sqrt(s2d**2 + np.sum(td**2, axis=1).max())) if params.mode else min(s2o+lo+to, s2d)
-    nw = int((far - near) / ray_step)
-    far = near + nw*ray_step
-    return near, far, nw
+    if ray_step > 0:
+        nw = int((far - near) / ray_step)
+        far = near + nw*ray_step
+        return near, far, nw
+    else:
+        return near, far
