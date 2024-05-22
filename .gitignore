@@ -1,3 +1,5 @@
+pyCT/backward/*.cpp
+pyCT/forward/*.cpp
 *.ipynb
 
 # Byte-compiled / optimized / DLL files
