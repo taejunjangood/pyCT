@@ -6,7 +6,7 @@ from copy import deepcopy
 
 def reconstruct(sinogram_array : np.ndarray,
                 parameters : _Parameters,
-                filter : str = 'ramp',
+                filter : str|None = 'ramp',
                 **kwargs):
     '''
     key : cuda, offset
@@ -23,13 +23,13 @@ def reconstruct(sinogram_array : np.ndarray,
     
     # set offset correction
     if 'offset' in kwargs.keys():
-        is_offsetCorrection = kwargs['offset']
+        is_offsetCorrection:bool = kwargs['offset']
     else:
-        is_offsetCorrection = False
+        is_offsetCorrection:bool = False
 
     # check filter
-    if filter is not None and filter.lower() not in ['none', 'ramp', 'ram-lak', 'shepp-logan', 'cosine', 'hamming', 'hann']:
-        raise ValueError('{} was not supported in pyCT'.format(filter) + '\nWe support the following filters: ramp or ram-lak, shepp-logan, cosine, hamming, hann')
+    FILTERS = ['none', 'ramp', 'ram-lak', 'shepp-logan', 'cosine', 'hamming', 'hann']
+    assert (filter is None) or filter.lower() in FILTERS, "{} was not supported in pyCT'.format(filter) + '\nWe support the following filters: ramp or ram-lak, shepp-logan, cosine, hamming, hann"
 
     # get parameters
     mode = parameters.mode
@@ -63,9 +63,9 @@ def reconstruct(sinogram_array : np.ndarray,
                 ou, ov = np.repeat(ou, na), np.repeat(ov, na)
             if len(oa) == 1:
                 oa = np.repeat(oa, na)
-            reconstruction_array = deepcopy(reconstructConeBeamGPU(reconstruction_array, sinogram_array, transformationMatrix, nx, ny, nz, nu, nv, na, su, sv, du, dv, ou, ov, oa, s2d))
+            reconstruction_array:np.ndarray = deepcopy(reconstructConeBeamGPU(reconstruction_array, sinogram_array, transformationMatrix, nx, ny, nz, nu, nv, na, su, sv, du, dv, ou, ov, oa, s2d))
         else:
-            reconstruction_array = deepcopy(reconstructParallelBeamGPU(reconstruction_array, sinogram_array, transformationMatrix, nx, ny, nz, nu, nv, na))
+            reconstruction_array:np.ndarray = deepcopy(reconstructParallelBeamGPU(reconstruction_array, sinogram_array, transformationMatrix, nx, ny, nz, nu, nv, na))
         reconstruction_array = reconstruction_array.reshape(nz, ny, nx)
     else:
         reconstruction_array = np.zeros([nz, ny, nx])

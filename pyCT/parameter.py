@@ -2,12 +2,12 @@ import json
 import numpy as np
 from copy import deepcopy
 
-def getParameters(path_header=None):
+def getParameters(path_header:str|None = None):
     return _Parameters(path_header)
 
 class _Parameters():
     def __init__(self, path_params:str):
-        self.mode = None
+        self.mode:bool = None
         self.object = _Object()
         self.source = _Source()
         self.detector = _Detector()
@@ -75,25 +75,22 @@ class _Parameters():
         json.dump(meta, open(path, 'w'), indent=2)
 
     def check(self):
-        for i in [self.object, self.detector]:
-            l = [i.size.checkNone(), i.spacing.checkNone(), i.length.checkNone()]        
-            if sum(l) > 1:
-                raise ValueError("At least two inputs are required: size, spacing, and length.")
+        for key, value in {'object':self.object, 'detector':self.detector}.items():
+            l = [value.size.checkNone(), value.spacing.checkNone(), value.length.checkNone()]
+            if sum(l) == 0:
+                assert not any(value.length.get() / value.size.get() - value.spacing.get()), "{0} : The relation between length, spacing, and size is incorrect.".format(key)
             elif sum(l) == 1:
                 if l[0]:
-                    i.size.set((i.length.get() / i.spacing.get()).astype(np.uint64))
+                    value.size.set((value.length.get() / value.spacing.get()).astype(np.uint64))
                 elif l[1]:
-                    i.spacing.set(i.length.get() / i.size.get())
+                    value.spacing.set(value.length.get() / value.size.get())
                 else:
-                    i.length.set(i.size.get() * i.spacing.get())
+                    value.length.set(value.size.get() * value.spacing.get())
             else:
-                if not any(i.size.get() * i.spacing.get() - i.length.get()):
-                    raise ValueError("The relation between length, spacing, and size is incorrect.")
+                assert False, "{0} : At least two inputs are required: size, spacing, and length.".format(key)
         
-        if self.source.distance.checkNone():
-            raise ValueError("Two inputs are required: source2origin and source2detector.")
-        if self.source.distance.source2detector < self.source.distance.source2origin:
-            raise ValueError("source2detector must be larger than source2origin.")
+        assert not self.source.distance.checkNone(), "Two inputs are required: source2origin and source2detector."
+        assert self.source.distance.source2origin < self.source.distance.source2detector, "source2detector must be larger than source2origin."
 
     def set(self, source_angles=[0], detector_offset=[0,0]):
         self.source.motion.rotation.set(source_angles, axes='z')
@@ -104,32 +101,32 @@ class _Parameters():
         
 
 class _2D():
-    def __init__(self, u=None, v=None):
+    def __init__(self, u:float|int=None, v:float|int=None):
         self.u = u
         self.v = v
-    def set(self, ls):
+    def set(self, ls:list | tuple | np.ndarray):
         self.u = ls[0]
         self.v = ls[1]
     def get(self):
         return np.array([self.u, self.v])
-    def checkNone(self):
+    def checkNone(self) -> bool:
         if (self.u == None) or (self.v == None):
             return True
         else:
             return False
 
 class _3D():
-    def __init__(self, x=None, y=None, z=None):
+    def __init__(self, x:float|int=None, y:float|int=None, z:float|int=None):
         self.x = x
         self.y = y
         self.z = z
-    def set(self, ls):
+    def set(self, ls:list | tuple | np.ndarray):
         self.x = ls[0]
         self.y = ls[1]
         self.z = ls[2]
     def get(self):
         return np.array([self.x, self.y, self.z])
-    def checkNone(self):
+    def checkNone(self) -> bool:
         if (self.x == None) or (self.y == None) or (self.z == None):
             return True
         else:
@@ -137,9 +134,11 @@ class _3D():
 
 class _Rotation2D():
     def __init__(self):
-        self.angles = [0]
+        self.angles:list = [0]
+    
     def get(self):
         return np.array(self.angles)
+    
     def set(self, angles):
         if type(angles) in TYPE:
             angles = [float(angles)]
@@ -151,12 +150,14 @@ class _Rotation2D():
 
 class _Rotation3D():
     def __init__(self):
-        self.angles = [[0]]
-        self.axes = 'z'
+        self.angles:list = [[0]]
+        self.axes:str = 'z'
+    
     def get(self, axis=1):
         return np.stack(self.angles, axis=axis), self.axes
-    def set(self, *angles, axes:str):
-        if len(angles)!=len(axes):
+    
+    def set(self, *angles:list|np.ndarray, axes:str):
+        if len(angles) != len(axes):
             raise ValueError("The number of angles ({0}) and the number of axes ({1}) do not match.".format(len(angles), len(axes)))
         angles = list(angles)
         for i, angle in enumerate(angles):
@@ -175,12 +176,14 @@ class _Rotation3D():
         self.axes = axes    
 
 class _Translation():
-    def __init__(self, dim):
-        self.vectors = [[0]]*dim
-        self.dim = dim
-    def get(self, axis=1):
+    def __init__(self, dim:int):
+        self.vectors:list = [[0]]*dim
+        self.dim:int = dim
+    
+    def get(self, axis:int=1):
         return np.stack(self.vectors, axis=axis)
-    def set(self, *vectors):
+    
+    def set(self, *vectors:np.ndarray):
         vectors = list(vectors)
         for i, vector in enumerate(vectors):
             if type(vector) in TYPE:
@@ -205,7 +208,7 @@ class _Motion():
             raise ValueError("Only 2D and 3D are supported.")
         self.translation = _Translation(dim)
 
-    def checkSize(self):
+    def checkSize(self) -> bool:
         if (len(self.rotation.angles) != len(self.translation.vectors)) and (len(self.translation.vectors) != 1):
             return False
         else:
@@ -213,13 +216,10 @@ class _Motion():
 
 class _Distance():
     def __init__(self):
-        self.source2origin = None
-        self.source2detector = None
-    def checkNone(self):
-        if (self.source2origin == None) or (self.source2detector == None):
-            return True
-        else:
-            return False
+        self.source2origin:float = None
+        self.source2detector:float = None
+    def checkNone(self) -> bool:
+        return (self.source2origin is None) or (self.source2detector is None)
 
 class _Object():
     def __init__(self):

@@ -6,10 +6,10 @@ def getTransformation(params, nw, near, far):
 
 class _Transformation():
     def __init__(self, params:_Parameters, nw:int, near:float, far:float):
-        self.worldTransformation  : np.ndarray = None
-        self.cameraTransformation : np.ndarray = None
-        self.viewTransformation   : np.ndarray = None
-        self.__params = params
+        self.worldTransformation  : np.ndarray  = None
+        self.cameraTransformation : np.ndarray  = None
+        self.viewTransformation   : np.ndarray  = None
+        self.__params             : _Parameters = params
 
         self.__setWorldTransformation()
         self.__setCameraTransformation()
@@ -54,7 +54,7 @@ class _Transformation():
         self.cameraTransformation = np.einsum('aij,ajk->aik', detectorFrame, _getTranslation(-sourceOrigin))
 
 
-    def __setViewTransformation(self, nw, near, far):
+    def __setViewTransformation(self, nw:int, near:float, far:float):
         if self.__params.mode:
             pass
         else:
@@ -77,7 +77,7 @@ class _Transformation():
 
 def _makeRotation(angle, 
                   axis:str
-                  ) -> np.ndarray:
+                  ):
     '''
     angle : (1,)
     axis  : (1,)
@@ -121,7 +121,7 @@ def _makeRotation(angle,
                              [np.zeros(na), np.sin(angle), np.cos(angle), np.zeros(na)],
                              [np.zeros(na), np.zeros(na), np.zeros(na), np.ones(na)]]).transpose(2,0,1)
         else:
-            raise ValueError('axis must be entered by one in {x, y, z}.')
+            assert False, "axis must be entered by one in {x, y, z}."
 
 def _getRotation(angles:np.ndarray, axes:str):
     '''
@@ -140,9 +140,8 @@ def _getRotation(angles:np.ndarray, axes:str):
     
 def _getTranslation(offset:np.ndarray):
     na, dim = offset.shape
-    if (dim == 3) or (dim == 2):
-        R = np.eye(4)[None,...].repeat(na, axis=0)
-        R[:, :dim, -1] = offset
-        return R
-    else:
-        raise ValueError()
+    assert (dim == 3) or (dim == 2), "Dimension must be 2 or 3. "
+    
+    R = np.eye(4)[None,...].repeat(na, axis=0)
+    R[:, :dim, -1] = offset
+    return R

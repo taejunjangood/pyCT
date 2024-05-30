@@ -22,7 +22,7 @@ def project(object_array : np.ndarray,
     
     # set step size
     if 'ray_step' in kwargs.keys():
-        ray_step = kwargs['ray_step']
+        ray_step = float(kwargs['ray_step'])
     else:
         ray_step = .5
     
@@ -51,9 +51,9 @@ def project(object_array : np.ndarray,
                 ou, ov = np.repeat(ou, na), np.repeat(ov, na)
             if len(oa) == 1:
                 oa = np.repeat(oa, na)
-            detector_array = deepcopy(projectConeBeamGPU(detector_array, object_array, transformationMatrix, nx, ny, nz, nu, nv, nw, na, su, sv, ou, ov, oa, s2d, near, far))
+            detector_array:np.ndarray = deepcopy(projectConeBeamGPU(detector_array, object_array, transformationMatrix, nx, ny, nz, nu, nv, nw, na, su, sv, ou, ov, oa, s2d, near, far))
         else:
-            detector_array = deepcopy(projectParallelBeamGPU(detector_array, object_array, transformationMatrix, nx, ny, nz, nu, nv, nw, na))
+            detector_array:np.ndarray = deepcopy(projectParallelBeamGPU(detector_array, object_array, transformationMatrix, nx, ny, nz, nu, nv, nw, na))
         detector_array = detector_array.reshape(na, nv, nu)
     
     else:
@@ -77,10 +77,10 @@ def _getNearFar(params:_Parameters, ray_step:float):
         raise ValueError("ray_step must be larger than zero.")
     s2o = params.source.distance.source2origin
     s2d = params.source.distance.source2detector
-    lo = np.linalg.norm(params.object.length.get()/2)
-    to = np.linalg.norm(params.object.motion.translation.get()-params.source.motion.translation.get(), axis=1).max()
-    td = params.detector.length.get()/2 + np.abs(params.detector.motion.translation.get())
-    near = max(0, s2o-lo-to)
+    lo:float = np.linalg.norm(params.object.length.get()/2)
+    to:float = np.linalg.norm(params.object.motion.translation.get()-params.source.motion.translation.get(), axis=1).max()
+    td:float = params.detector.length.get()/2 + np.abs(params.detector.motion.translation.get())
+    near = max(0., s2o-lo-to)
     far = min(s2o+lo+to, np.sqrt(s2d**2 + np.sum(td**2, axis=1).max())) if params.mode else min(s2o+lo+to, s2d)
     if ray_step > 0:
         nw = int((far - near) / ray_step)
